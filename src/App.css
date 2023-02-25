@@ -2,6 +2,58 @@
   text-align: center;
 }
 
+section{
+  text-align: center;
+}
+
+html, body, #app, #app>div {
+  height: 100%;
+  color: white;
+}
+
+.box-main {
+  height: 100%;
+}
+
+.navbar {
+  background: black;
+  height: 20%;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+}
+
+.container{
+  color: black;
+  font-weight: bold;
+  text-align: center;
+}
+
+input{
+  text-align: center;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+.nav-list img{
+  width: 30%;
+  height: auto;
+}
+
+.navbar a:hover{
+  color: blue
+}
+.link{
+  color: blue
+}
+.link a:hover{
+  color: purple
+}
+
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

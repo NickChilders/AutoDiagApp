@@ -39,10 +39,10 @@ const LoginPage = () => {
             <Form.Group>
               
               <div className="btn-group">
-                <Button style={{ width: "auto", margin: "20px" }} variant="primary" type="submit">Submit</Button>
+                <Button style={{ width: "auto", height:"auto", margin: "20px" }} variant="primary" type="submit">Submit</Button>
               </div>
               <div className='link'>
-                    <NavLink style={{margin: "20px"}} eventKey="4" as={Link} to="/register" >Need to Register?</NavLink>
+                    <NavLink style={{margin: "20px"}} eventKey="4" as={Link} to={`${process.env.PUBLIC_URL}/register`} >Need to Register?</NavLink>
               </div>
             </Form.Group>
           </Form>

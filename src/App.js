@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
 import LoginPage from './components/LoginPage';
+import RegistrationPage from './components/RegistrationPage';
 import Diagnostics from './components/Diag';
 import Maintenance from './components/Maintenance';
 import Forums from './components/Forums';
@@ -92,6 +93,7 @@ function App() {
           <Route exact path={`${process.env.PUBLIC_URL}/diagnostics`} element={<Diagnostics />} />
           <Route exact path={`${process.env.PUBLIC_URL}/maintenance`} element={<Maintenance />} />
           <Route exact path={`${process.env.PUBLIC_URL}/forums`} element={<Forums />} />
+          <Route exact path={`${process.env.PUBLIC_URL}/register`} element={<RegistrationPage />} />
         </Routes>
 
         <footer className="footer" >

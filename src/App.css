@@ -15,7 +15,9 @@ html, body, #app, #app>div {
   height: 100%;
 }
 
+
 .navbar {
+  padding: 0 15px;
   background: black;
   height: 20%;
   width: 100%;
@@ -33,11 +35,29 @@ html, body, #app, #app>div {
 input{
   text-align: center;
 }
+
 .footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+.text-footer {
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.text-footer > * {
+  margin-left: 45px;
+}
+
+
+With this CSS,
 .nav-list img{
   width: 30%;
   height: auto;

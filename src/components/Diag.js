@@ -1,7 +1,12 @@
 import React from "react";
 import { Button } from 'react-bootstrap';
 
-const Diagnostics = () => {
+const handleSearchAlert = (searchParams) => {
+  let disclaimer =  require('./../TesterFiles/Disclaimers.json')
+  alert(`${disclaimer.Diag}`)
+}
+
+const Diagnostics = () => { 
   return (
       <div>
         <div className="index_body">
@@ -13,7 +18,7 @@ const Diagnostics = () => {
                   Diagnostics &emsp;
                   <div>
                     <input type="text" name="search" id="search" placeholder="(Ex: Car misfire)"/>
-                    <Button className="btn btn-sm"  type="search" style={{margin:"20px"}} >Search</Button>
+                    <Button className="btn btn-sm btn-group"  type="search" style={{margin:"20px"}} onClick={(e) => (handleSearchAlert(e))}>Search</Button>
                   </div>
                 </h1>
               </div>
@@ -30,7 +35,6 @@ const Diagnostics = () => {
             </div>
           </section>
         </div>
-
       </div>
   );
 };

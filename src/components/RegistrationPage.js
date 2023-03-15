@@ -1,27 +1,102 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from './userContext';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 const RegistrationPage = () => {
-  const [username, setUsername] = useState('');
+  const { user, setUser } = useContext(UserContext);
+  const [usr, setUsr] = useState('');
   const [email, setEmail] = useState('');
-  const [Password, setPassword, confirmPassword, checkPassword] = useState('')
-  const [vehicleMake, setVehicleMake] = useState('');
-  const [vehicleModel, setVehicleModel] = useState('');
-  const [vehicleYear, setVehicleYear] = useState('');
+  const [vin, setVin] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
-  const handleSubmit = (event) => {
+
+  const navigate = useNavigate();
+
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    if (e.target.value !== password) {
+      setPasswordsMatch(false);
+    } else {
+      setPasswordsMatch(true);
+    }
+  };
+
+  const fetchVehicleInfo = async (vin) => {
+    let url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinExtended/${vin}?format=json`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const make = data.Results[7].Value;
+    const model = data.Results[9].Value;
+    const year = data.Results[10].Value;
+    const series = data.Results[12].Value;
+    
+    return { make, model, year, series };
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // handle form submission here
+
+    // Get vehicle information
+    const { make, model, year, series } = await fetchVehicleInfo(vin);
+
+    // Redirect to home page with username parameter
+    // POST request using fetch with async/await
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: JSON.stringify({
+        username: usr,
+        password: password,
+        email: email,
+        vehicleVIN: vin,
+        vehicleMake: make,
+        vehicleModel: model,
+        vehicleSeries: series,
+        vehicleYear: year,
+      }),
+    };
+    await fetch(`http://localhost:3001/`, requestOptions)
+      .then((response) => {
+        // check for error response
+        if (!response.ok) {
+          // get error message from body or default to response status
+          const error = response.status;
+          return Promise.reject(error);
+        } else {
+          setUser({
+            username: usr,
+            userEmail: email,
+            vehicleVIN: vin,
+            vehicleMake: make,
+            vehicleModel: model,
+            vehicleYear: year,
+            vehicleImgUrl: response.vehicleImgUrl,
+            token: response.token
+          });
+          console.log(JSON.stringify(user));
+          navigate(`${process.env.PUBLIC_URL}/`);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <Container>
-      <Form action={`${process.env.PUBLIC_URL}/register`} style={{ margin: "20px"}} onSubmit={handleSubmit}>
+      <Form action={`${process.env.PUBLIC_URL}/register`} style={{ margin: "20px" }} onSubmit={handleSubmit}>
         <Row>
           <Col>
             <Form.Label>
               Username:
-              <input type="text" className="form-control" placeholder="Enter username here." value={username} onChange={(e) => setUsername(e.target.value)} />
+              <input type="text" className="form-control" placeholder="Enter username here." value={usr} onChange={(e) => setUsr(e.target.value)} />
             </Form.Label>
           </Col>
         </Row>
@@ -36,24 +111,8 @@ const RegistrationPage = () => {
         <Row>
           <Col>
             <Form.Label>
-              Vehicle Make:
-              <input type="text" className="form-control" placeholder="(Ex. Toyota)" value={vehicleMake} onChange={(e) => setVehicleMake(e.target.value)} />
-            </Form.Label>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form.Label>
-              Vehicle Model:
-              <input type="text" className="form-control" placeholder="(Ex. Camry LE)" value={vehicleModel} onChange={(e) => setVehicleModel(e.target.value)} />
-            </Form.Label>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form.Label>
-              Vehicle Year:
-              <input type="number" className="form-control" placeholder="(Ex. 2014)" value={vehicleYear} onChange={(e) => setVehicleYear(e.target.value)} />
+              Vehicle VIN:
+              <input type="text" className="form-control" placeholder="#################" value={vin} onChange={(e) => setVin(e.target.value)} />
             </Form.Label>
           </Col>
         </Row>
@@ -61,7 +120,7 @@ const RegistrationPage = () => {
           <Col>
             <Form.Label>
               Password:
-              <input type="password" className="form-control" placeholder="Enter a unique password." value={Password} onChange={(e) => setPassword(e.target.value)} />
+              <input type="password" className="form-control" placeholder="Enter a unique password." value={password} onChange={(e) => setPassword(e.target.value)} />
             </Form.Label>
           </Col>
         </Row>
@@ -69,15 +128,17 @@ const RegistrationPage = () => {
           <Col>
             <Form.Label>
               Confirm Password:
-              <input type="password" className="form-control" placeholder="Re-enter password." value={confirmPassword} onChange={(e) => checkPassword(e.target.value)} />
+              <input type="password" className="form-control" placeholder="Re-enter password." value={confirmPassword} onChange={handleConfirmPasswordChange} />
             </Form.Label>
+            {!passwordsMatch && <div style={{ color: 'red' }}>Passwords do not match!</div>}
           </Col>
         </Row>
         <div className='btn-group'>
-        <Button style={{width:"auto", height:"auto",margin: "20px"}} variant="primary" type="submit">Register</Button>
+          <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="submit">Register</Button>
         </div>
       </Form>
     </Container>
+
   );
 };
 

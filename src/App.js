@@ -1,108 +1,81 @@
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { NavLink } from "react-bootstrap";
 import NavigationBar from './components/NavigationBar';
 import LoginPage from './components/LoginPage';
 import RegistrationPage from './components/RegistrationPage';
 import Diagnostics from './components/Diag';
 import Maintenance from './components/Maintenance';
 import Forums from './components/Forums';
-import cel from "./images/CEL.png";
-import maint from "./images/Maint.png";
 import './App.css';
+import { UserContext } from './components/userContext';
+import AccountInfo from './components/AccountInfo';
+import MainPage from './components/MainPage';
+import { BsClipboard2Check, BsWrench } from "react-icons/bs";
+import { MdManageAccounts, MdOutlineLogin, MdOutlineLogout, MdOutlineHome, MdOutlineForum } from "react-icons/md";
 
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData !== null) {
+      setUser(userData);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('userData', JSON.stringify(user));
+    }
+  }, [user]);
+
+  // Add this useEffect to check if user data exists in local storage when the page refreshes
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData) {
+      setUser(userData);
+      setToken(userData?.token);
+    }
+  }, []);
+
   return (
     <Router>
-      <NavigationBar/>
-      <div style={{paddingBottom: '200px', paddingTop: '50px'}}>
-        <Routes>
-          <Route exact path={`${process.env.PUBLIC_URL}/`} element={
-            [
-              <section className="section" key="section1">
-                <div className="box-main">
-                  <div className="firstHalf">
-                    <h1 className="text-big" style={{marginTop:"20px"}}>
-                      Welcome to AutoDiag!
-                    </h1>
-                    <p className="text-small">
-                      You no longer need to be an expert to properly maintain and diagnose your car with confidence.
-                    </p>
-                    <Link to="/diagnostics">
-                      <img
-                          src={cel}
-                          width = "auto"
-                          height = "70"
-                          alt="diagnostics link"
-                      />
-                    </Link>
-                  </div>
-                </div>
-              </section>
-            ,
-              <section className="section" key="section2">
-                <div className="box-main">
-                  <div className="secondHalf">
-                    <h1 className="text-big" id="program" style={{marginTop:"100px"}}>
-                      Maintenance
-                    </h1>
-                    <p className="text-small">
-                      No need to worry about finding the correct information. All necessary maintenance for YOUR car.
-                    </p>
-                    <Link to="/maintenance">
-                      <img
-                          src={maint}
-                          width = "auto"
-                          height = "100"
-                          alt="maintenance link"
-                      />
-                    </Link>
-                  </div>
-                </div>
-              </section>
-            ,
-              <section className="section" key="section3">
-                <div className="box-main">
-                  <div className="secondHalf">
-                    <h1 className="text-big" id="program" style={{marginTop:"100px"}}>
-                      Message Board
-                    </h1>
-                    <p className="text-small">
-                      Browse the forums for everything related to YOUR car's year, make, and model.
-                    </p>
-                  </div>
-                </div>
-              </section>
-            ,
-            <section className="section" key="section4">
-              <div className="box-main">
-                <div className="secondHalf">
-                  <h1 className="text-big" id="program" style={{marginTop:"100px"}}>
-                    My Car
-                  </h1>
-                  <p className="text-small">
-                    Track everything for your car. Year, Make, Model, Miles, MPG, etc.
-                    All information needed to keep you and your car safe.
-                    No more sifting through endless searches.
-                  </p>
-                </div>
-              </div>
-            </section>
-            ]
-          } />
-          <Route exact path={`${process.env.PUBLIC_URL}/login`} element={<LoginPage />} />
-          <Route exact path={`${process.env.PUBLIC_URL}/diagnostics`} element={<Diagnostics />} />
-          <Route exact path={`${process.env.PUBLIC_URL}/maintenance`} element={<Maintenance />} />
-          <Route exact path={`${process.env.PUBLIC_URL}/forums`} element={<Forums />} />
-          <Route exact path={`${process.env.PUBLIC_URL}/register`} element={<RegistrationPage />} />
-        </Routes>
-
-        <footer className="footer" >
-          <p className="text-footer">
-            Copyright ©-All rights are reserved
-          </p>
-        </footer>
-      </div>
-      
+      <UserContext.Provider value={{ user, setUser, token }}>
+        <NavigationBar />
+        <div style={{ paddingBottom: '200px', paddingTop: '50px' }}>
+          <Routes>
+            <Route exact path={`${process.env.PUBLIC_URL}/`} element={<MainPage />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/login`} element={<LoginPage />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/diagnostics`} element={<Diagnostics />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/maintenance`} element={<Maintenance />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/forums`} element={<Forums />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/register`} element={<RegistrationPage />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/account`} element={<AccountInfo />} />
+          </Routes>
+          <footer className="footer">               
+            <p className="text-footer">
+              <NavLink  eventkey="0" as={Link} to={`${process.env.PUBLIC_URL}/`} href={`${process.env.PUBLIC_URL}/`}><MdOutlineHome /></NavLink>
+              <NavLink eventkey="1" as={Link} to={`${process.env.PUBLIC_URL}/diagnostics`} href={`${process.env.PUBLIC_URL}/diagnostics`}><BsWrench /></NavLink>
+              <NavLink eventkey="2" as={Link} to={`${process.env.PUBLIC_URL}/maintenance`} href={`${process.env.PUBLIC_URL}/maintenance`}><BsClipboard2Check /></NavLink>
+              <NavLink eventkey="3" as={Link} to={`${process.env.PUBLIC_URL}/forums`} href={`${process.env.PUBLIC_URL}/forums`}><MdOutlineForum /></NavLink>
+              {user ? 
+                (
+                  <>
+                    <NavLink eventkey="4" as={Link} to={`${process.env.PUBLIC_URL}/account`} href={`${process.env.PUBLIC_URL}/account`}><MdManageAccounts /></NavLink>
+                    <NavLink eventkey="6" as={Link} to={`${process.env.PUBLIC_URL}/login`} href={`${process.env.PUBLIC_URL}/login`} onClick={() => { setUser(null); localStorage.clear();}}><MdOutlineLogout /></NavLink>
+                  </>
+                ) : 
+                (
+                    <NavLink eventkey="5" as={Link} to={`${process.env.PUBLIC_URL}/login`} href={`${process.env.PUBLIC_URL}/login`}><MdOutlineLogin /></NavLink>
+                )
+              }
+              &emsp; &emsp; &copy; All rights reserved
+            </p>
+          </footer>
+        </div>
+      </UserContext.Provider>
     </Router>
   )
 }

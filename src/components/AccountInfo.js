@@ -27,22 +27,17 @@ const AccountInfo = () => {
     }
 
     useEffect(() => {
-        const loadUserData = () => {
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            if (userData) {
-                setImgUrl(userData.vehicleImgUrl);
-                setMake(userData.vehicleMake);
-                setModel(userData.vehicleModel);
-                setSeries(userData.vehicleSeries);
-            }
-            const token = userData?.token;
-            if (token && !userData) {
-                const userDataUrl = `http://localhost:3001/users/${token}`;
-                fetchUserData(userDataUrl);
-            }
-        };
-        loadUserData();
-    }, []);
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData && userData.token) {
+          const userDataUrl = `http://localhost:3001/users/${userData.token}`;
+          fetchUserData(userDataUrl);
+        } else if (userData) {
+          setImgUrl(userData.vehicleImgUrl);
+          setMake(userData.vehicleMake);
+          setModel(userData.vehicleModel);
+          setSeries(userData.vehicleSeries);
+        }
+      }, []);
 
     useEffect(() => {
         const getImg = async (userData) => {

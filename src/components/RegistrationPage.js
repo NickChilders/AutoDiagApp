@@ -63,30 +63,33 @@ const RegistrationPage = () => {
       }),
     };
     await fetch(`http://localhost:3001/`, requestOptions)
-      .then((response) => {
-        // check for error response
-        if (!response.ok) {
-          // get error message from body or default to response status
-          const error = response.status;
-          return Promise.reject(error);
-        } else {
-          setUser({
-            username: usr,
-            userEmail: email,
-            vehicleVIN: vin,
-            vehicleMake: make,
-            vehicleModel: model,
-            vehicleYear: year,
-            vehicleImgUrl: response.vehicleImgUrl,
-            token: response.token
-          });
-          console.log(JSON.stringify(user));
-          navigate(`${process.env.PUBLIC_URL}/`);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
+  .then(async (response) => {
+    // check for error response
+    if (!response.ok) {
+      // get error message from body or default to response status
+      const error = response.status;
+      return Promise.reject(error);
+    } 
+    else {
+      const data = await response.json(); // parse JSON response
+      setUser({
+        username: usr,
+        userEmail: email,
+        vehicleVIN: vin,
+        vehicleMake: make,
+        vehicleModel: model,
+        vehicleSeries: series,
+        vehicleYear: year,
+        vehicleImgUrl: data.vehicleImgUrl, // access vehicleImgUrl from parsed JSON
+        token: data.token, // access token from parsed JSON
       });
+      navigate(`${process.env.PUBLIC_URL}/`);
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+      
   };
 
   return (

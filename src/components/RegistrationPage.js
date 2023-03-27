@@ -11,10 +11,7 @@ const RegistrationPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-
-
   const navigate = useNavigate();
-
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
@@ -32,16 +29,15 @@ const RegistrationPage = () => {
     const make = data.Results[7].Value;
     const model = data.Results[9].Value;
     const year = data.Results[10].Value;
-    const series = data.Results[12].Value;
-    
-    return { make, model, year, series };
-  };
 
+    return { make, model, year };
+  };
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Get vehicle information
-    const { make, model, year, series } = await fetchVehicleInfo(vin);
+    const { make, model, year} = await fetchVehicleInfo(vin);
 
     // Redirect to home page with username parameter
     // POST request using fetch with async/await
@@ -58,38 +54,31 @@ const RegistrationPage = () => {
         vehicleVIN: vin,
         vehicleMake: make,
         vehicleModel: model,
-        vehicleSeries: series,
         vehicleYear: year,
       }),
     };
     await fetch(`http://localhost:3001/`, requestOptions)
-  .then(async (response) => {
-    // check for error response
-    if (!response.ok) {
-      // get error message from body or default to response status
-      const error = response.status;
-      return Promise.reject(error);
-    } 
-    else {
-      const data = await response.json(); // parse JSON response
-      setUser({
-        username: usr,
-        userEmail: email,
-        vehicleVIN: vin,
-        vehicleMake: make,
-        vehicleModel: model,
-        vehicleSeries: series,
-        vehicleYear: year,
-        vehicleImgUrl: data.vehicleImgUrl, // access vehicleImgUrl from parsed JSON
-        token: data.token, // access token from parsed JSON
-      });
-      navigate(`${process.env.PUBLIC_URL}/`);
-    }
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-      
+    .then(async (response) => {
+      // check for error response
+      if (!response.ok) {
+        // get error message from body or default to response status
+        const error = response.status;
+        return Promise.reject(error);
+      }
+      else {
+        const data = await response.json(); // parse JSON response
+        setUser({
+          username: usr,
+          userEmail: email,
+          vehicles: data.vehicles,
+          token: data.token, // access token from parsed JSON
+        });
+        navigate(`${process.env.PUBLIC_URL}/`);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   return (

@@ -1,5 +1,23 @@
-# Link to Server Code:
+## Link to Server Code:
 https://github.com/NickChilders/AutoDiagServer
+
+# Before starting make sure you have all dependencies installed.
+### Follow these steps to do so:
+You need to have node.js and npm installed on your machine.<br>
+In order to install Node.js and npm on your machine you can use the instructions found here:<br>
+https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+<br>
+<br>
+Once you have installed Node.js and npm and you have all code files on your machine, you must now add the dependencies.<br>
+run the following command:<br>
+```
+npm install
+```
+<br>
+Now you should be able to run npm start successfully.<br>
+
+#### Note:
+You must have the server code running in a separate terminal in order to run the app properly.
 
 # Getting Started with Create React App
 

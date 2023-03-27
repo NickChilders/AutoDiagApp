@@ -214,6 +214,7 @@ const AccountInfo = () => {
             setAddError(error.message)
         }
     }
+
     /**************************************************************************\
         Desc.:  This function fetches vehicle information from the server.
                 Then calls the addUserVehicle function with the returned data.
@@ -284,6 +285,61 @@ const AccountInfo = () => {
             .catch((error) => console.log(error));
     };
 
+    /**********************************************************************************\
+        Desc.:  This function deletes a vehicle from a user's vehicles array in the server.
+        Input:  token: user's token (required)
+                vin: vin number (required).
+    ***********************************************************************************/
+    const deleteUserVehicle = async (token, vin) => {
+        // Construct the request options for a POST request to the server
+        const requestOptions = {
+            method: 'DELETE',
+        };
+
+        // Define the URL to fetch with the request Options.
+        const url = `http://localhost:3001/users/${token}/remove-vehicle/${vin}`;
+        try {
+            // Post the information the server using fetch().
+            const response = await fetch(url, requestOptions);
+
+            // Handle different response statuses
+            if (response.status === 400) {
+                throw new Error('Must have at least one vehicle registered!');
+            } else if (response.status === 401) {
+                throw new Error(
+                    `Sorry for the inconvenience. There was a problem removing VIN#: ${vin}. We will investigate the issue and you may try again later.`
+                );
+            }
+
+            // If the delete request is successful, update the vehicles state
+            const newVehicles = vehicles.filter((vehicle) => vehicle.vehicleVIN !== vin);
+            setVehicles(newVehicles);
+
+            // Grab the response in JSON format then set a success message to be displayed.
+            const data = await response.json();
+            setSuccessful(`${data.message}. You may need to refresh the page.`);
+        } catch (error) {
+            // Catch an error and then set an error message to be displayed.
+            console.error(error);
+            setAddError(error.message);
+        }
+    };
+
+
+    const handleClickDelete = async (event) => {
+        // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
+        event.preventDefault();
+        // Display a confirmation dialog to the user
+        const confirmDelete = window.confirm("Are you sure you want to remove this vehicle?");
+
+        // If the user clicks "OK" on the confirmation dialog, proceed with the delete request
+        if (confirmDelete) {
+            // Retrieve the userData object from localStorage and parse it to a JavaScript object
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            deleteUserVehicle(userData.token, vehicles[currentIndex].vehicleVIN);
+        }
+    }
+
     return (
         <div>
             <div className="index_body">
@@ -309,10 +365,13 @@ const AccountInfo = () => {
                                     </Col>
                                 </Row>
                             )}
-                            <Row>
+                            <Row style={{display: "flow-root"}}>
                                 <Col>
                                     <div>
-                                        <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="add" onClick={handleClickAdd}>{"Click To Add A Vehicle"}</Button>
+                                        <Row>
+                                            <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="add" onClick={handleClickAdd}>{"Add Vehicle"}</Button>
+                                            <Button style={{ width: "auto", height: "auto", margin: "20px", backgroundColor: "red", borderColor: "red" }} color="red" variant="primary" type="delete" onClick={handleClickDelete}>{"Remove Vehicle"}</Button>
+                                        </Row>
                                         {add && (
                                             <Container>
                                                 <div className='add-vehicle-form'>
@@ -337,6 +396,10 @@ const AccountInfo = () => {
                                             </Container>
                                         )}
                                     </div>
+                                </Col>
+                            </Row>
+                            <Row style={{display:"flow-root"}}>
+                                <Col>
                                     {addError && <Alert variant="danger">{addError}</Alert>}
                                     {successful && <Alert>{successful}</Alert>}
                                 </Col>

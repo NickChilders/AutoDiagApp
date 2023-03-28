@@ -36,7 +36,8 @@ npm install
 Now you should be able to run npm start successfully.<br>
 
 ### Note:
-You must have the server code running in a separate terminal in order to run the app properly.
+You must have the server code running in a separate terminal in order to run the app properly.<br>
+If you do not have the server code running, you will not be able to log in or register.
 
 #### Link to Server Code:
 https://github.com/NickChilders/AutoDiagServer

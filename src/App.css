@@ -119,3 +119,87 @@ With this CSS,
     transform: rotate(360deg);
   }
 }
+
+.post-table {
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-inline: auto;
+}
+
+.post-table th,
+.post-table td {
+  border: 8px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.post-table th {
+  background-color: #0d6efd;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.post-title {
+  width: 55%;
+}
+
+.post-replies {
+  width: 15%;
+  text-align: center;
+}
+
+.post-authors {
+  width: 30%;
+  text-align: right;
+}
+.author {
+  font-weight: bold;
+}
+
+.timeAgo {
+  font-weight: normal;
+  font-size: small;
+}
+
+.comments-box {
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.comment {
+  display: inherit;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment-profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.comment-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-author {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: gray;
+}
+
+.comment-text {
+  font-size: 14px;
+}

@@ -7,6 +7,7 @@ import RegistrationPage from './components/RegistrationPage';
 import Diagnostics from './components/Diag';
 import Maintenance from './components/Maintenance';
 import Forums from './components/Forums';
+import PostPage from './components/PostPage'
 import './App.css';
 import { UserContext } from './components/userContext';
 import AccountInfo from './components/AccountInfo';
@@ -53,6 +54,7 @@ function App() {
             <Route exact path={`${process.env.PUBLIC_URL}/forums`} element={<Forums />} />
             <Route exact path={`${process.env.PUBLIC_URL}/register`} element={<RegistrationPage />} />
             <Route exact path={`${process.env.PUBLIC_URL}/account`} element={<AccountInfo />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/api/posts/:id`} element={<PostPage />} />
           </Routes>
           <footer className="footer">               
             <p className="text-footer">

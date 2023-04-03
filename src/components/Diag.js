@@ -30,13 +30,13 @@ const Diagnostics = () => {
                 <p className="text-small">
                   You no longer need to be an expert to properly diagnose your car with confidence.
                 </p>
-                <div className="box-main">
+                <p>
                   Please &nbsp;
                   <NavLink eventkey="0" as={Link} to={`${process.env.PUBLIC_URL}/login`} href={`${process.env.PUBLIC_URL}/login`}>Sign In</NavLink>
                   &nbsp; or &nbsp;
                   <NavLink eventkey="1" as={Link} to={`${process.env.PUBLIC_URL}/register`} href={`${process.env.PUBLIC_URL}/register`}>Register</NavLink>
                   &nbsp; To Continue.
-                </div>
+                </p>
               </div>
             </div>
           </div>

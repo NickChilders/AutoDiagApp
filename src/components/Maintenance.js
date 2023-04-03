@@ -20,20 +20,20 @@ const Maintenance = () => {
                 </div>
               </div>
             </section>
-              <div className="box-main" >
-                <div className="secondHalf">
-                  <p className="text-small">
-                    You no longer need to be an expert to know how to perform your car maintenance.
-                  </p>
-                  <div className="box-main">
-                    Please &nbsp;
-                    <NavLink eventkey="0" as={Link} to={`${process.env.PUBLIC_URL}/login`} href={`${process.env.PUBLIC_URL}/login`}>Sign In</NavLink>
-                    &nbsp; or &nbsp;
-                    <NavLink eventkey="1" as={Link} to={`${process.env.PUBLIC_URL}/register`} href={`${process.env.PUBLIC_URL}/register`}>Register</NavLink>
-                    &nbsp; To Continue.
-                  </div>
-                </div>
+            <div className="box-main" >
+              <div className="secondHalf">
+                <p className="text-small">
+                  You no longer need to be an expert to know how to perform your car maintenance.
+                </p>
+                <p>
+                  Please &nbsp;
+                  <NavLink eventkey="0" as={Link} to={`${process.env.PUBLIC_URL}/login`} href={`${process.env.PUBLIC_URL}/login`}>Sign In</NavLink>
+                  &nbsp; or &nbsp;
+                  <NavLink eventkey="1" as={Link} to={`${process.env.PUBLIC_URL}/register`} href={`${process.env.PUBLIC_URL}/register`}>Register</NavLink>
+                  &nbsp; To Continue.
+                </p>
               </div>
+            </div>
           </div>
         </div>
       )

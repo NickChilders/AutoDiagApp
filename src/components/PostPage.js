@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { BsThreeDotsVertical } from "react-icons/bs"
+import { MdArrowBack } from 'react-icons/md'
 import { UserContext } from './userContext';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button, NavLink } from 'react-bootstrap';
 
 const PostPage = () => {
   const { id } = useParams();
@@ -11,6 +13,7 @@ const PostPage = () => {
   const [message, setMessage] = useState('');
   const [empty, setEmpty] = useState(false);
   const [content, setContent] = useState('');
+  const [postDate, setPostDate] = useState(null);
 
   useEffect(() => {
     const fetchPostAndComments = async () => {
@@ -19,7 +22,8 @@ const PostPage = () => {
         const response = await fetch(`http://localhost:3001/api/posts/${id}`);
         const postData = await response.json();
         setPost(postData);
-
+        const dt = new Date(postData.createdAt)
+        setPostDate(dt)
         // Fetch the comments for the post
         const commentsData = postData.comments;
         setComments(commentsData);
@@ -68,17 +72,30 @@ const PostPage = () => {
   return (
     <div>
       <section>
-        <Row>
-          <Col>
-            <h3>{post.title}</h3>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <p>posted by: {post.author}</p>
-          </Col>
-        </Row>
+        <div>
+          <h3>
+            <NavLink eventkey="3" style={{ display: "inline-block" }} as={Link} to={`${process.env.PUBLIC_URL}/forums`} href={`${process.env.PUBLIC_URL}/forums`}><MdArrowBack /></NavLink>
+            &emsp;&emsp;{post.title}{user && user.username === post.author && (
+              <>
+                <button className="btn dropdown-toggle-no-arrow p-0 border-0 bg-transparent" style={{ margin: "auto" }} type="button" id="postDropdownMenu" data-bs-toggle="dropdown">&emsp;<BsThreeDotsVertical /></button>
+                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="postDropdownMenu" style={{ width: "auto", height: "auto" }}>
+                  <li><Button className="dropdown-item" onClick={() => console.log("Edit post")} style={{ width: "auto", height: "auto" }}>{"Edit"}</Button></li>
+                  <li><Button className="dropdown-item" onClick={() => console.log("Delete post")} style={{ width: "auto", height: "auto" }}>{"Delete"}</Button></li>
+                </ul>
+              </>
+            )}
+          </h3>
+          <Row>
+            <Col>
+              <p>
+                posted by: <b>{post.author}</b>
+                <div style={{fontSize: "small"}}>{postDate.toLocaleString()}</div>
+              </p>
+            </Col>
+          </Row>
+        </div>
       </section>
+
       <hr />
       <section>
         <div className="box-main">
@@ -87,7 +104,7 @@ const PostPage = () => {
       </section>
       <hr />
       <section>
-      <h5>Comments</h5>
+        <h5>Comments</h5>
         <div className="comments-box">
           {empty ?
             <div className="comment">{message}</div>
@@ -96,8 +113,24 @@ const PostPage = () => {
               {comments.map((comment) => (
                 <div key={comment._id} className="comment">
                   <div className="comment-content">
-                    <p className="comment-author">{comment.author} <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span></p>
-                    <p className="comment-text">{comment.content}</p>
+                    <Row>
+                      <Col>
+                        <p className="comment-author">{comment.author} <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span></p>
+                        <p className="comment-text">{comment.content}</p>
+                      </Col>
+                      <Col>
+                        {user && user.username === comment.author && (
+                          <>
+                            <button className="btn dropdown-toggle-no-arrow p-0 border-0 bg-transparent" style={{ margin: "auto" }} type="button" id="postDropdownMenu" data-bs-toggle="dropdown">&emsp;<BsThreeDotsVertical /></button>
+                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="postDropdownMenu" style={{ width: "auto", height: "auto" }}>
+                              <li><Button className="dropdown-item" onClick={() => console.log("Edit comment")} style={{ width: "auto", height: "auto" }}>{"Edit"}</Button></li>
+                              <li><Button className="dropdown-item" onClick={() => console.log("Delete comment")} style={{ width: "auto", height: "auto" }}>{"Delete"}</Button></li>
+                            </ul>
+                          </>
+                        )}
+                      </Col>
+                    </Row>
+
                   </div>
                 </div>
               ))}
@@ -113,7 +146,7 @@ const PostPage = () => {
               <div className="form-group">
                 <textarea className="form-control" id="content" name="content" rows="4" cols="50" placeholder="Add a comment..." value={content} onChange={handleContentChange}></textarea>
               </div>
-              <button type="submit" className="btn btn-primary">Submit</button>
+              <Button type="submit" style={{margin: "20px", height:"auto", width:"auto"}}className="btn btn-primary">{"Submit"}</Button>
             </form>
           </div>
         </div>

@@ -16,7 +16,6 @@ const Forums = () => {
   const [posts, setPosts] = useState([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState({ user });
   const [search, setSearch] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -187,10 +186,6 @@ const Forums = () => {
     setContent(event.target.value);
   };
 
-  const handleAuthorChange = (event) => {
-    setAuthor(event.target.value);
-  }
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = localStorage.getItem('userData')
@@ -253,14 +248,14 @@ const Forums = () => {
                 <p className="text-small">
                   Talk among others that have the same car as you.
                 </p>
-                <div className="box-main">
+                <p>
                   Please &nbsp;
                   <NavLink eventkey="0" as={Link} to={`${process.env.PUBLIC_URL}/login`} href={`${process.env.PUBLIC_URL}/login`}>Sign In</NavLink>
                   &nbsp; or &nbsp;
                   <NavLink eventkey="1" as={Link} to={`${process.env.PUBLIC_URL}/register`} href={`${process.env.PUBLIC_URL}/register`}>Register</NavLink>
                   &nbsp; To Continue.
-                </div>
-              </div>
+                </p>
+                </div>    
             </div>
           </div>
         </div>

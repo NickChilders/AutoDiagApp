@@ -55,7 +55,7 @@ const NavigationBar = () => {
                         {user ? (
                             <>
                                 <NavLink eventKey="4" as={Link} to={`${process.env.PUBLIC_URL}/account`} href={`${process.env.PUBLIC_URL}/account`} style={{ display: "flex" }}><MdManageAccounts />&emsp;Account</NavLink>
-                                <NavLink eventKey="6" as={Link} style={{ display: "flex" }} to={`${process.env.PUBLIC_URL}/`} href={`${process.env.PUBLIC_URL}/`} onClick={() => { setUser(null); localStorage.clear(); }}><MdOutlineLogout />&emsp;Logout</NavLink>
+                                <NavLink eventKey="6" as={Link} style={{ display: "flex" }} to={`${process.env.PUBLIC_URL}/login`} href={`${process.env.PUBLIC_URL}/login`} onClick={() => { setUser(null); localStorage.clear(); }}><MdOutlineLogout />&emsp;Logout</NavLink>
                             </>
                         ) : (
                             <div className="navbar-end">

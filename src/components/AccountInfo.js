@@ -367,10 +367,10 @@ const AccountInfo = () => {
                             )}
                             <Row style={{display: "flow-root"}}>
                                 <Col>
-                                    <div>
+                                    <div style={{display:"inline-block"}}>
                                         <Row>
-                                            <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="add" onClick={handleClickAdd}>{"Add Vehicle"}</Button>
-                                            <Button style={{ width: "auto", height: "auto", margin: "20px", backgroundColor: "red", borderColor: "red" }} color="red" variant="primary" type="delete" onClick={handleClickDelete}>{"Remove Vehicle"}</Button>
+                                            <Button style={{ width: "auto", height: "auto", margin: "10px", }} variant="primary" type="add" onClick={handleClickAdd}>{"Add Vehicle"}</Button>
+                                            <Button style={{ width: "auto", height: "auto", margin: "10px", backgroundColor: "red", borderColor: "red" }} color="red" variant="primary" type="delete" onClick={handleClickDelete}>{"Remove Vehicle"}</Button>
                                         </Row>
                                         {add && (
                                             <Container>

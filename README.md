@@ -118,10 +118,6 @@ To request approval for a new branch to be merged into the master branch, you mu
 Once the pull request is created, the team you assigned will receive a notification. They can review the changes and leave comments or requests for changes. Once they are satisfied with the changes, they can approve the pull request and merge the new branch into the master branch.
 <br>
 <br>
-
-
-<br>
-<br>
 <br>
 # Getting Started with Create React App
 

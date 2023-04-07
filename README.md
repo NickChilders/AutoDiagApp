@@ -10,7 +10,8 @@ Move into the cloned repository:<br>
 ```
 cd <repository>
 ```
-Replace "repository" with the name of the repository you created.<br>
+Replace "repository" with the name of the repository you created.
+<br>
 <br>
 To ensure you have the latest version of the code, pull any changes made to the repository:<br>
 ```
@@ -21,15 +22,20 @@ This will pull the latest changes made to the "master" branch of the repository.
 If you want to update your local repository with any further changes made to the remote repository in the future, you can simply run the same `git pull` command again.
 <br>
 
-# Before starting make sure you have all dependencies installed.
+# Before starting to make code changes, please ensure you have all dependencies installed.
+
 ### Follow these steps to do so:
-You need to have node.js and npm installed on your machine.<br>
-In order to install Node.js and npm on your machine you can use the instructions found here:<br>
+You need to have node.js and npm installed on your machine.
+<br>
+In order to install Node.js and npm on your machine you can use the instructions found here:
+<br>
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 <br>
 <br>
-Once you have installed Node.js and npm and you have all code files on your machine, you must now add the dependencies.<br>
-run the following command:<br>
+Once you have installed Node.js and npm and you have all code files on your machine, you must now add the dependencies.
+<br>
+run the following command:
+<br>
 ```
 npm install
 ```
@@ -48,6 +54,69 @@ If you do not have the server code running, you will not be able to log in or re
 #### Link to Server Code:
 https://github.com/NickChilders/AutoDiagServer
 <br>
+To stop the code from running hit `CTRL+C` on Windows or Cmd+C on Mac.
+<br>
+<br>
+Now we need to create a separate branch to work with. This will prevent undesired code changes to the master branch.
+<br>
+```
+git checkout -b your_name_branch
+```
+Replace "your_name_branch" with your name. (example: nickc_branch)
+<br>
+You can now make changes to the code on this new branch. 
+<br>
+When you are ready to commit your changes check the status to verify all of the changed files.
+```
+git status
+```
+If everything looks correct add the changed files.
+<br>
+```
+git add <changed files>
+```
+<br>
+OR
+```
+git add .
+```
+to add all changed files.
+<br>
+Now you are ready to commit the changes.
+<br>
+```
+git commit -m "Decription of changes that were made"
+```
+<br>
+Once you have committed your changes, you can push the new branch to GitHub using the push command.
+```
+git push --set-upstream origin your_name_branch
+```
+<br>
+Your new branch is now available on GitHub, and you can continue making changed to the code on this branch as needed.
+<br>
+<br>
+To request approval for a new branch to be merged into the master branch, you must create a pull request.
+<br>
+Go to the repository on GitHub where your branch is located.
+<br>
+Click on the "New pull request" button.
+<br>
+Select the master branch and the branch you created.
+<br>
+GitHub will show you the changes that have been made in your branch. Review these changes to make sure everything looks correct.
+<br>
+Write a brief description of the changes you have made and why they were necessary.
+<br>
+Assign the pull request to the team for review.
+<br>
+Click on the "Create pull request" button.
+<br>
+Once the pull request is created, the team you assigned will receive a notification. They can review the changes and leave comments or requests for changes. Once they are satisfied with the changes, they can approve the pull request and merge the new branch into the master branch.
+<br>
+<br>
+
+
 <br>
 <br>
 <br>

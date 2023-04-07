@@ -55,8 +55,7 @@ If you do not have the server code running, you will not be able to log in or re
 https://github.com/NickChilders/AutoDiagServer
 <br>
 <br>
-
-To stop the code from running hit `CTRL+C` on Windows or Cmd+C on Mac.
+To stop the code from running hit `CTRL+C` on Windows or `Cmd+C` on Mac.
 <br>
 <br>
 Now we need to create a separate branch to work with. This will prevent undesired code changes to the master branch.

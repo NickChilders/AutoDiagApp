@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from 'react-router-dom';
-import { Button, Row, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Button, Row, Col, ListGroup, Container, Form } from 'react-bootstrap';
 import { UserContext } from './userContext';
 
 const Diagnostics = () => {
@@ -18,6 +18,8 @@ const Diagnostics = () => {
   const [searchedObd, setSearchedObd] = useState('');
   const [obdSuccess, setObdSuccess] = useState(false);
   const [obdError, setObdError] = useState(false)
+  const [diagSearch, setDiagSearch] = useState(false);
+  const [symptom, setSymptom] = useState('');
 
   /********************************************************************\  
       Desc.:  Fetch data from the specified URL and update the state
@@ -160,6 +162,32 @@ const Diagnostics = () => {
     let disclaimer = require('./../TesterFiles/Disclaimers.json')
     alert(`${disclaimer.Diag}`)
   }
+  
+  /*************************************************************************\
+  *   Desc.:  Once clicked, the user can search symptoms for a diagnosis.
+  * ************************************************************************/
+  const handleClickSearch = async (event) => {
+    event.preventDefault();
+    setDiagSearch(true);
+  }
+
+  /********************************************************************************\
+  *   Desc.:  Handles when the user clicks the 'Cancel' Button
+  *********************************************************************************/
+  const handleCancel = (event) => {
+    // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
+    event.preventDefault();
+    //  Close the form to add a vehicle.
+    setDiagSearch(false)
+  }
+
+  const handleGetDiag = async (event) => {
+    //  Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
+    event.preventDefault();
+    console.log(`Searched for diagnosis information regarding: ${symptom}`);
+     //  Close the form to search symptoms.
+     setDiagSearch(false)
+  }
 
   const getCodeInfo = async (code) => {
     const url = `https://car-code.p.rapidapi.com/obd2/${code}`
@@ -186,6 +214,7 @@ const Diagnostics = () => {
     setSearchedObd(obd);
     getCodeInfo(obd)
   }
+
   const handleYes = () => {
     setObdError(false);
     if (obdSuccess)
@@ -228,9 +257,6 @@ const Diagnostics = () => {
     else {
       return (
         <div>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <button className="btn btn-sm btn-group" type="search" style={{ height: "auto", width: "auto" }} onClick={(e) => (handleSearchAlert(e))}><u style={{ fontSize: 18, color: "blue" }}>{'Search'}</u></button><input type="text" name="search" id="search" placeholder="(Ex: Car misfire)" />
-          </div>
           <div className="index_body">
             <section className="section" >
               <div className="box-main" >
@@ -288,7 +314,31 @@ const Diagnostics = () => {
                 </div>
               </>
             )}
-
+            <div className="box-main">
+              <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="search" onClick={(e) => { handleSearchAlert(e); handleClickSearch(e); }}>{"Diagnose Symptoms"}</Button>
+            </div>
+            {diagSearch && (
+              <Container>
+                <div className="diag-search-form">
+                  <Form style={{ margin: "20px" }} onSubmit={handleGetDiag}>
+                    <Row>
+                      <Col>
+                        <Form.Label>
+                          Enter symptom:
+                          <input type="text" className="form-control" placeholder="(Ex. Rough idle)" value={symptom} onChange={(e) => setSymptom(e.target.value)} />
+                        </Form.Label>
+                      </Col>
+                    </Row>
+                    <div className='btn-group'>
+                      <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="submit">{"Search"}</Button>
+                    </div>
+                    <div>
+                      <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="cancel" onClick={handleCancel}>{"Cancel"}</Button>
+                    </div>
+                  </Form>
+                </div>
+              </Container>
+            )}
           </div>
         </div >
       )

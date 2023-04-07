@@ -73,8 +73,8 @@ function App() {
                     <NavLink eventkey="5" as={Link} to={`${process.env.PUBLIC_URL}/login`} href={`${process.env.PUBLIC_URL}/login`}><MdOutlineLogin /></NavLink>
                 )
               }
-              <div style={{color:"rgb(255 255 255 / 55%)"}}>&copy; All rights reserved</div>
             </p>
+            <p style={{color:"rgb(255 255 255 / 55%)", display: "flex", justifyContent: "flex-end"}}>&copy; All rights reserved &emsp;</p>
           </footer>
         </div>
       </UserContext.Provider>

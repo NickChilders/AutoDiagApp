@@ -53,7 +53,7 @@ input{
 }
 
 .text-footer > * {
-  margin-left: 45px;
+  margin-left: 30px;
 }
 
 .add-vehicle-form {
@@ -203,3 +203,14 @@ With this CSS,
 .comment-text {
   font-size: 14px;
 }
+ol {
+  counter-reset: item;
+  margin-left: 0;
+  padding-left: 0;
+  }
+  
+  li:before {
+  content: counters(item, ".") ". ";
+  counter-increment: item;
+  margin-right: 0.5rem;
+  }

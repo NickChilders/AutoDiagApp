@@ -55,15 +55,6 @@ const Maintenance = () => {
                 </div>
               </div>
             </section>
-            <section className="section" >
-              <div className="box-main" >
-                <div className="secondHalf">
-                  <p className="text-small">
-                    You no longer need to be an expert to know how to perform your car maintenance.
-                  </p>
-                </div>
-              </div>
-            </section>
           </div>
         </div>
       )

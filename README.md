@@ -76,8 +76,9 @@ If everything looks correct add the changed files.
 ```
 git add <changed files>
 ```
-<br>
+
 OR
+<br>
 ```
 git add .
 ```
@@ -88,7 +89,6 @@ Now you are ready to commit the changes.
 ```
 git commit -m "Decription of changes that were made"
 ```
-<br>
 Once you have committed your changes, you can push the new branch to GitHub using the push command.
 ```
 git push --set-upstream origin your_name_branch
@@ -99,19 +99,21 @@ Your new branch is now available on GitHub, and you can continue making changed 
 <br>
 To request approval for a new branch to be merged into the master branch, you must create a pull request.
 <br>
-Go to the repository on GitHub where your branch is located.
 <br>
-Click on the "New pull request" button.
+&emsp;1. Go to the repository on GitHub where your branch is located.
 <br>
-Select the master branch and the branch you created.
+&emsp;2. Click on the "New pull request" button.
 <br>
-GitHub will show you the changes that have been made in your branch. Review these changes to make sure everything looks correct.
+&emsp;3. Select the master branch and the branch you created.
 <br>
-Write a brief description of the changes you have made and why they were necessary.
+&emsp;4. GitHub will show you the changes that have been made in your branch. Review these changes to make sure everything looks correct.
 <br>
-Assign the pull request to the team for review.
+&emsp;5. Write a brief description of the changes you have made and why they were necessary.
 <br>
-Click on the "Create pull request" button.
+&emsp;6. Assign the pull request to the team for review.
+<br>
+&emsp;7. Click on the "Create pull request" button.
+<br>
 <br>
 Once the pull request is created, the team you assigned will receive a notification. They can review the changes and leave comments or requests for changes. Once they are satisfied with the changes, they can approve the pull request and merge the new branch into the master branch.
 <br>

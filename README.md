@@ -16,9 +16,10 @@ To ensure you have the latest version of the code, pull any changes made to the 
 ```
 git pull origin master
 ```
-This will pull the latest changes made to the "master" branch of the repository.<br>
-If you want to update your local repository with any further changes made to the remote repository in the future, you can simply run the same `git pull` command again.<br>
-
+This will pull the latest changes made to the "master" branch of the repository.
+<br>
+If you want to update your local repository with any further changes made to the remote repository in the future, you can simply run the same `git pull` command again.
+<br>
 
 # Before starting make sure you have all dependencies installed.
 ### Follow these steps to do so:
@@ -33,7 +34,12 @@ run the following command:<br>
 npm install
 ```
 <br>
-Now you should be able to run npm start successfully.<br>
+Copy the .env-example file and create a new .env file
+<br>
+Contact the code owner for the RAPID_KEY and RAPID_HOST variables. Add them to the .env file you just created.
+<br>
+Now you should be able to run npm start successfully.
+<br>
 
 ### Note:
 You must have the server code running in a separate terminal in order to run the app properly.<br>

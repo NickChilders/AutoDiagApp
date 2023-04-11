@@ -159,8 +159,7 @@ const Diagnostics = () => {
   }, [user]);
 
   const handleSearchAlert = (searchParams) => {
-    let disclaimer = require('./../TesterFiles/Disclaimers.json')
-    alert(`${disclaimer.Diag}`)
+    alert(`${process.env.REACT_APP_DIAG_DISCLAIMER}`)
   }
   
   /*************************************************************************\

@@ -2,6 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Container, Form } from 'react-bootstrap';
 import { UserContext } from './userContext';
+import { Pie } from 'react-chartjs-2'
+import ChartDataLabelsPlugin from 'chartjs-plugin-datalabels';
+import 'chart.js/auto';
+import Chart from 'chart.js/auto';
 
 const Diagnostics = () => {
   const { user } = useContext(UserContext);
@@ -20,6 +24,19 @@ const Diagnostics = () => {
   const [obdError, setObdError] = useState(false)
   const [diagSearch, setDiagSearch] = useState(false);
   const [symptom, setSymptom] = useState('');
+  const [allSymptoms, setAllSymptoms] = useState([]);
+  const [filteredSymptoms, setFilteredSymptoms] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchFix, setSearchFix] = useState("");
+  const [chartData, setChartData] = useState(null);
+  const [options, setOptions] = useState({});
+  const [displayChart, setDisplayChart] = useState(false);
+  const [noData, setNoData] = useState(false);
+  const [addFixForm, setAddFixForm] = useState(false);
+  const [availFixes, setAvailFixes] = useState([]);
+  const [noFixes, setNoFixes] = useState(false);
+  const [solution, setSolution] = useState('');
+  const [thanks, setThanks] = useState(false);
 
   /********************************************************************\  
       Desc.:  Fetch data from the specified URL and update the state
@@ -158,16 +175,60 @@ const Diagnostics = () => {
     getImg(user);
   }, [user]);
 
-  const handleSearchAlert = (searchParams) => {
+  useEffect(() => {
+    const fetchSymptoms = async () => {
+      const response = await fetch(`http://localhost:3001/api/diag/symptoms/all?vehicleMake=${make}&vehicleModel=${model}&vehicleYear=${year}`);
+      if (response.ok) {
+        const resData = await response.json();
+        setAllSymptoms(resData);
+        setFilteredSymptoms(resData);
+      } else {
+        console.log("ERROR: Something went wrong getting symptom data.");
+      }
+    };
+    fetchSymptoms();
+  }, [make, model, year]);
+
+  const handleAlert = () => {
     alert(`${process.env.REACT_APP_DIAG_DISCLAIMER}`)
   }
-  
+
+  const handleSearch = (event) => {
+    setAddFixForm(false);
+    setSymptom(event.target.value);
+    setSearchTerm(event.target.value);
+    if (event.target.value === "")
+      setFilteredSymptoms([]);
+    else {
+      const filtered = allSymptoms.filter((s) =>
+        s.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      setFilteredSymptoms(filtered);
+    }
+  };
+  const handleFixSearch = (event) => {
+    setSymptom(event.target.value);
+    setSearchTerm(event.target.value);
+    if (event.target.value === "")
+      setFilteredSymptoms([]);
+    else {
+      const filtered = allSymptoms.filter((s) =>
+        s.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      setFilteredSymptoms(filtered);
+    }
+  }
   /*************************************************************************\
   *   Desc.:  Once clicked, the user can search symptoms for a diagnosis.
   * ************************************************************************/
   const handleClickSearch = async (event) => {
     event.preventDefault();
+    setThanks(false);
+    setNoData(false);
+    setDisplayChart(false);
     setDiagSearch(true);
+    setSearchTerm('');
+    setSearchFix('');
   }
 
   /********************************************************************************\
@@ -176,16 +237,138 @@ const Diagnostics = () => {
   const handleCancel = (event) => {
     // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
     event.preventDefault();
-    //  Close the form to add a vehicle.
-    setDiagSearch(false)
+    //  Close the forms.
+    setDiagSearch(false);
+    setAddFixForm(false);
+    setSolution('');
+    setSearchTerm('');
+    setSearchFix('');
+  }
+
+  const getAFix = async (symptom) => {
+    const response = await fetch(`http://localhost:3001/api/diag/symptoms?vehicleMake=${make}&vehicleModel=${model}&vehicleYear=${year}&symptom=${symptom}`)
+    const data = await response.json()
+    return data;
   }
 
   const handleGetDiag = async (event) => {
     //  Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
     event.preventDefault();
-    console.log(`Searched for diagnosis information regarding: ${symptom}`);
-     //  Close the form to search symptoms.
-     setDiagSearch(false)
+    //Returns a symptom and a fix with percentages
+    const data = await getAFix(symptom)
+    const fixesData = []
+    if (data.length > 0) {
+      data.forEach((fix) => {
+        fixesData.push({ label: fix.fix, data: fix.percentage })
+      })
+      //  Close the form to search symptoms.
+      setDiagSearch(false)
+      const chartData = {
+        labels: fixesData.map((fix) => fix.label),
+        datasets: [
+          {
+            data: fixesData.map((fix) => parseFloat(fix.data)),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(255, 159, 64, 0.6)',
+            ],
+          },
+        ],
+
+      };
+      const opts = {
+        plugins: {
+          datalabels: {
+            display: true,
+            color: 'black',
+            font: {
+              weight: 'bold'
+            },
+            formatter: (value, ctx) => {
+              let sum = 0;
+              let dataArr = ctx.chart.data.datasets[0].data;
+              dataArr.map(data => {
+                sum += data;
+              });
+              let percentage = '';
+              if (sum === 0)
+                percentage = '0%'
+              else
+                percentage = (parseFloat(value) * 100 / sum).toFixed(2) + "%";
+              return percentage;
+            }
+          }
+        }
+      };
+      // Register the plugin
+      Chart.register(ChartDataLabelsPlugin);
+      setOptions(opts);
+      setDisplayChart(true);
+      setChartData(chartData);
+      setDiagSearch(false)
+      setSearchTerm('');
+    }
+    else {
+      setDisplayChart(false)
+      setNoData(true);
+      setDiagSearch(false)
+      setSearchTerm('');
+    }
+  }
+
+  const handleAddFixClick = (event) => {
+    event.preventDefault();
+    setThanks(false);
+    setDisplayChart(false);
+    setNoData(false);
+    setAddFixForm(true);
+    setSearchTerm('');
+    setSearchFix('');
+  }
+
+  const handleFixCheck = async (event) => {
+    event.preventDefault();
+    const data = await getAFix(symptom)
+    const fixesData = []
+    if (data.length > 0) {
+      data.forEach((fix) => {
+        fixesData.push(fix.fix)
+      })
+      setAvailFixes(fixesData);
+    }
+    else
+      setNoFixes(true);
+  }
+
+  const handleAddFix = async (event) => {
+    event.preventDefault();
+    const data = localStorage.getItem('userData')
+    const parsedData = JSON.parse(data);
+    const response = await fetch(`http://localhost:3001/api/diag/symptoms`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'user': `${parsedData.username}`
+      },
+      body: JSON.stringify({
+        vehicleMake: make,
+        vehicleModel: model,
+        vehicleYear: year,
+        symptom: symptom,
+        fix: solution
+      })
+    })
+    if (response.ok) {
+      setSolution('')
+      setSearchFix('')
+      setSearchTerm('')
+      setAddFixForm(false)
+      setThanks(true)
+    }
   }
 
   const getCodeInfo = async (code) => {
@@ -314,24 +497,33 @@ const Diagnostics = () => {
               </>
             )}
             <div className="box-main">
-              <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="search" onClick={(e) => { handleSearchAlert(e); handleClickSearch(e); }}>{"Diagnose Symptoms"}</Button>
+              <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="search" onClick={(e) => { handleAlert(e); handleClickSearch(e); }}>{"Diagnose Symptoms"}</Button>
+              <Button style={{ width: "auto", height: "auto", margin: "20px", backgroundColor: "orange", borderColor: "orange" }} variant="primary" onClick={handleAddFixClick}>{"Submit Solution"}</Button>
             </div>
             {diagSearch && (
               <Container>
                 <div className="diag-search-form">
                   <Form style={{ margin: "20px" }} onSubmit={handleGetDiag}>
+                    <Form.Label>Search or select a symptom.</Form.Label>
                     <Row>
                       <Col>
                         <Form.Label>
                           Enter symptom:
-                          <input type="text" className="form-control" placeholder="(Ex. Rough idle)" value={symptom} onChange={(e) => setSymptom(e.target.value)} />
+                          <p style={{ fontSize: "10px" }}>(Some symptoms may not have results. This may be because other users have not input the symptom and solution.)</p>
+                          <input type="text" className="form-control" list="symptoms" value={searchTerm} onChange={(e) => handleSearch(e)} />
+                          <datalist id="symptoms">
+                            <option>Select the best match</option>
+                            {filteredSymptoms.map((s, index) => (
+                              <option key={index} value={s}>
+                                {s}
+                              </option>
+                            ))}
+                          </datalist>
                         </Form.Label>
                       </Col>
                     </Row>
                     <div className='btn-group'>
                       <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="submit">{"Search"}</Button>
-                    </div>
-                    <div>
                       <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="cancel" onClick={handleCancel}>{"Cancel"}</Button>
                     </div>
                   </Form>
@@ -339,6 +531,86 @@ const Diagnostics = () => {
               </Container>
             )}
           </div>
+          <section>
+            {noData && !displayChart && (
+              <>
+                <h3>{`Unfortunately, there is no diagnostic data for '${symptom}'`}</h3>
+                <h5>When you solve your issue, we ask that you input what worked to help other users.</h5>
+              </>
+            )}
+          </section>
+          <section>
+            {displayChart && (
+              <>
+                <h3>{`Diagnostics for: ${symptom}`}</h3>
+                <div className="box-main">
+                  <div id="myChartContainer" className="chart-container">
+                    <Pie data={chartData} options={options} />
+                  </div>
+                </div>
+              </>
+            )}
+            {addFixForm && (
+              <Container>
+                <div className="add-fix-form">
+                  <Form style={{ margin: "20px" }} onSubmit={handleAddFix}>
+                    <Form.Label>Congrats on fixing your car trouble!</Form.Label>
+                    <br />
+                    <Form.Label>Let's help others who may also run into your issue.</Form.Label>
+                    <br />
+                    <br />
+                    <Row>
+                      <Col>
+                        <Form.Label>Briefly state what your main symptom was:</Form.Label>
+                      </Col>
+                    </Row>
+                    <input type="text" className="form-control" list="symptoms" value={searchTerm} onChange={(e) => handleFixSearch(e)} />
+                    <datalist id="symptoms">
+                      <option>Select the best match</option>
+                      {filteredSymptoms.map((s, index) => (
+                        <option key={index} value={s}>{s}</option>
+                      ))}
+                    </datalist>
+                    <br />
+                    {!noFixes ? (
+                      <>
+                        <Form.Label>You may choose to select a solution, or provide a new one.</Form.Label>
+                        <input type="text" className="form-control" list="solutions" value={searchFix} onChange={(e) => { handleFixCheck(e); setSearchFix(e.target.value); setSolution(e.target.value) }} />
+                        <datalist id="solutions">
+                          {availFixes.map((fix, index) => (
+                            <option key={index} value={fix}>{fix}</option>
+                          ))}
+                        </datalist>
+                      </>
+                    ) : (
+                      <>
+                        <Form.Label>Briefly state what your solution was.</Form.Label>
+                        <input type="text" className="form-control" value={searchFix} onChange={(e) => { setSearchFix(e.target.value) }} />
+                      </>
+                    )}
+                    <Row>
+                      <Col>
+                        <div className='btn-group'>
+                          <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="submit">{"Submit"}</Button>
+                          <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="cancel" onClick={handleCancel}>{"Cancel"}</Button>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Form>
+                </div>
+              </Container>
+            )}
+            {thanks && (
+              <div className="box-main">
+                <h3>Thank you for submitting a solution!</h3>
+              </div>
+            )}
+            <div className="box-main">
+              <p>When you solve your issue, we ask that you input what worked to help other users.</p>
+              <br />
+              <br />
+            </div>
+          </section>
         </div >
       )
     }

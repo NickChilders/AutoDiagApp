@@ -2,11 +2,14 @@
   text-align: center;
 }
 
-section{
+section {
   text-align: center;
 }
 
-html, body, #app, #app>div {
+html,
+body,
+#app,
+#app>div {
   height: 100%;
   color: white;
 }
@@ -26,13 +29,13 @@ html, body, #app, #app>div {
   display: flex;
 }
 
-.container{
+.container {
   color: black;
   font-weight: bold;
   text-align: center;
 }
 
-input{
+input {
   text-align: center;
 }
 
@@ -52,7 +55,7 @@ input{
   text-align: center;
 }
 
-.text-footer > * {
+.text-footer>* {
   margin-left: 30px;
 }
 
@@ -80,19 +83,33 @@ input{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.add-fix-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
 With this CSS,
-.nav-list img{
+.nav-list img {
   width: 30%;
   height: auto;
 }
 
-.navbar a:hover{
+.navbar a:hover {
   color: blue
 }
-.link{
+
+.link {
   color: blue
 }
-.link a:hover{
+
+.link a:hover {
   color: purple
 }
 
@@ -127,6 +144,7 @@ With this CSS,
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -167,6 +185,7 @@ With this CSS,
   width: 30%;
   text-align: right;
 }
+
 .author {
   font-weight: bold;
 }
@@ -215,14 +234,20 @@ With this CSS,
 .comment-text {
   font-size: 14px;
 }
+
 ol {
   counter-reset: item;
   margin-left: 0;
   padding-left: 0;
-  }
-  
-  li:before {
+}
+
+li:before {
   content: counters(item, ".") ". ";
   counter-increment: item;
   margin-right: 0.5rem;
-  }
+}
+
+.chart-container {
+  width: 350px;
+  height: 350px;
+}

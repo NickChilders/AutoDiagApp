@@ -270,14 +270,11 @@ const Maintenance = () => {
                 <div className="firstHalf">
                   <h1 className="text-big">
                     Maintenance &emsp;
-                    <div>
-                      <input type="text" name="search" id="search" placeholder="(Ex: Oil Change)" />
-                      <Button className="btn btn-sm" type="search" style={{ margin: "20px", height: "auto", width: "auto" }}>{"Search"}</Button>
-                    </div>
+                    <hr />
                     <div className="box-main">
                       <p style={{ fontSize: 11 }}>
                         See what your car is scheduled for based on the current mileage.
-                      </p><Button variant="primary" style={{ margin: "20px", width: "auto", height: "auto" }} onClick={handleScheduleClick}>Maintenance Schedule</Button>
+                      </p><Button variant="primary" style={{ margin: "20px", width: "auto", height: "auto" }} onClick={handleScheduleClick}>{"Recommended Maintenance"}</Button>
                     </div>
                   </h1>
                 </div>

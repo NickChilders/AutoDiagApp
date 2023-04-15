@@ -14,6 +14,8 @@ import AccountInfo from './components/AccountInfo';
 import MainPage from './components/MainPage';
 import { BsClipboard2Check, BsWrench } from "react-icons/bs";
 import { MdManageAccounts, MdOutlineLogin, MdOutlineLogout, MdOutlineHome, MdOutlineForum } from "react-icons/md";
+import MaintenanceNewJob from './components/MaintenanceNewJob';
+import MaintenanceJob from './components/MaintenanceJob';
 
 
 function App() {
@@ -55,6 +57,8 @@ function App() {
             <Route exact path={`${process.env.PUBLIC_URL}/register`} element={<RegistrationPage />} />
             <Route exact path={`${process.env.PUBLIC_URL}/account`} element={<AccountInfo />} />
             <Route exact path={`${process.env.PUBLIC_URL}/api/posts/:id`} element={<PostPage />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/api/maintenance/job/:id`} element={<MaintenanceJob />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/api/maintenance/job/new`} element={<MaintenanceNewJob />} />
           </Routes>
           <footer className="footer">               
             <p className="text-footer">

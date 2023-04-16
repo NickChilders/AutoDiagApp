@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from './userContext';
 import { MdArrowForward } from "react-icons/md";
-import { Row, Col, Button, Container, Form, Alert } from 'react-bootstrap';
+import { Row, Col, Button, Container, Form, Alert, ListGroup,ListGroupItem } from 'react-bootstrap';
 
 const AccountInfo = () => {
     const { user } = useContext(UserContext);
@@ -343,7 +343,7 @@ const AccountInfo = () => {
     return (
         <div>
             <div className="index_body">
-                <section className="section">
+                <section className="section0" style={{textAlign: "center"}}>
                     <div className="box-main">
                         <div className="firstHalf">
                             <Row>
@@ -365,9 +365,9 @@ const AccountInfo = () => {
                                     </Col>
                                 </Row>
                             )}
-                            <Row style={{display: "flow-root"}}>
+                            <Row style={{ display: "flow-root" }}>
                                 <Col>
-                                    <div style={{display:"inline-block"}}>
+                                    <div style={{ display: "inline-block" }}>
                                         <Row>
                                             <Button style={{ width: "auto", height: "auto", margin: "10px", }} variant="primary" type="add" onClick={handleClickAdd}>{"Add Vehicle"}</Button>
                                             <Button style={{ width: "auto", height: "auto", margin: "10px", backgroundColor: "red", borderColor: "red" }} color="red" variant="primary" type="delete" onClick={handleClickDelete}>{"Remove Vehicle"}</Button>
@@ -398,7 +398,7 @@ const AccountInfo = () => {
                                     </div>
                                 </Col>
                             </Row>
-                            <Row style={{display:"flow-root"}}>
+                            <Row style={{ display: "flow-root" }}>
                                 <Col>
                                     {addError && <Alert variant="danger">{addError}</Alert>}
                                     {successful && <Alert>{successful}</Alert>}
@@ -407,49 +407,21 @@ const AccountInfo = () => {
                         </div>
                     </div>
                 </section>
-                <div className='box-main'>
-                    <img src={imgUrl} width="auto" height="300" alt="users car" />
-                </div>
-                <section className="section" style={{ display: "flex" }}>
-                    <div className="box-main" >
-                        <div className="secondHalf">
-                            <h2 className="text-lessBig">
-                                Vehicle VIN: {vin}
-                            </h2>
-                        </div>
+                <section className="section1">
+                    <div className='box-main'>
+                        <img src={imgUrl} width="auto" height="250" alt="users car" />
                     </div>
                 </section>
-
-                <section className="section" >
-                    <div className="box-main" >
-                        <div className="secondHalf">
-                            <h2 className="text-lessBig">
-                                Vehicle Make: {`${make}`}
-                            </h2>
-                        </div>
+                <section className="section2" style={{textAlign: "left"}}>
+                    <div className="box-main">
+                        <ListGroup>
+                            <ListGroupItem><b>Vehicle VIN:</b> &emsp;{vin}</ListGroupItem>
+                            <ListGroupItem><b>Vehicle Make:</b> &emsp;{`${make}`}</ListGroupItem>
+                            <ListGroupItem><b>Vehicle Model:</b> &emsp;{`${model}`}</ListGroupItem>
+                            <ListGroupItem><b>Vehicle Year:</b> &emsp;{year}</ListGroupItem>
+                        </ListGroup>
                     </div>
                 </section>
-
-                <section className="section" >
-                    <div className="box-main" >
-                        <div className="secondHalf">
-                            <h2 className="text-lessBig">
-                                Vehicle Model: {`${model}`}
-                            </h2>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="section" >
-                    <div className="box-main" >
-                        <div className="secondHalf">
-                            <h2 className="text-lessBig">
-                                Vehicle Year: {year}
-                            </h2>
-                        </div>
-                    </div>
-                </section>
-
             </div>
         </div>
     );

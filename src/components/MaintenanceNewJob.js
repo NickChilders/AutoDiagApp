@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { UserContext } from './userContext';
 
 const MaintenanceNewJob = () => {
@@ -171,13 +171,18 @@ const MaintenanceNewJob = () => {
         setSteps(newSteps);
     };
 
+    const handleCancel = () => {
+        history(`${process.env.PUBLIC_URL}/maintenance`);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const data = localStorage.getItem('userData')
         const parsedData = JSON.parse(data);
         try {
-            await fetch("http://localhost:3001/api/maintenance/job", {
+            const response = await fetch("http://localhost:3001/api/maintenance/job", {
                 method: "POST",
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     heading: heading,
                     steps: steps,
@@ -187,7 +192,8 @@ const MaintenanceNewJob = () => {
                     author: parsedData.username
                 })
             });
-            history(`${process.env.PUBLIC_URL}/maintenance`);;
+            if(response.ok)
+                history(`${process.env.PUBLIC_URL}/maintenance`);
         }
         catch (error) {
             console.error(error);
@@ -216,11 +222,14 @@ const MaintenanceNewJob = () => {
                                                 <Form.Label htmlFor={`imageUrl-${index}`}>Step {index + 1} Image URL (Optional)</Form.Label>
                                                 <input type="text" className="form-control" id={`imageUrl-${index}`} value={step.imageUrl} onChange={(e) => handleStepChange(index, 'imageUrl', e.target.value)} />
                                             </div>
-                                            {steps.length > 1 && <Button className="btn btn-sm" style={{ margin: "20px", width: "auto", height: "40px", background: "#dc3545", borderColor: "#dc3545" }} onClick={() => removeStep(index)}>Remove Step {index + 1}</Button>}
+                                            {steps.length > 1 && <Button className="btn btn-primary" style={{ margin: "20px", width: "auto", height: "auto", backgroundColor: "red", borderColor: "red" }} onClick={() => removeStep(index)}>Remove Step {index + 1}</Button>}
                                         </div>
                                     ))}
-                                    <Button className="btn btn-sm" style={{ margin: "20px", width: "auto", height: "40px" }} onClick={addStep}>Add Step</Button>
-                                    <Button type="submit" className="btn btn-primary">Submit</Button>
+                                    <Button className="btn btn-primary" style={{ margin: "20px", width: "auto", height: "auto" }} onClick={addStep}>Add Step</Button>
+                                    <Button type="submit" className="btn btn-primary" style={{ margin: "20px", width: "auto", height: "auto" }}>Submit</Button>
+                                    <Row><Col>
+                                    <Button type="cancel" className="btn btn-primary" style={{ margin: "20px", width: "auto", height: "auto", backgroundColor: "red", borderColor: "red" }} onClick={handleCancel}>Cancel</Button>
+                                    </Col></Row>
                                 </Form>
                             </div>
                         </div>

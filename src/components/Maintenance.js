@@ -186,7 +186,7 @@ const Maintenance = () => {
         }
       })
       const data = await response.json();
-      if(response.ok){
+      if (response.ok) {
         setScheduleData(data.data);
         setMilesError('');
       }
@@ -206,7 +206,7 @@ const Maintenance = () => {
     }
     else {
       await fetchSchedule();
-      if(scheduleData){
+      if (scheduleData) {
         setReturned(true);
         setViewSchedule(false);
       }
@@ -265,7 +265,7 @@ const Maintenance = () => {
       return (
         <div>
           <div className="index_body">
-            <section className="section">
+            <section className="section0" style={{textAlign: "center"}}>
               <div className="box-main">
                 <div className="firstHalf">
                   <h1 className="text-big">
@@ -299,15 +299,20 @@ const Maintenance = () => {
                 </div>
               </Container>
             )}
+            <section className="section1" style={{textAlign: "center"}}>
+              <Button as={Link} to={`${process.env.PUBLIC_URL}/api/maintenance/job/new`} variant="primary" style={{ margin: "20px", height: "auto", width: "auto" }}>
+                {"Add Procedure"}
+              </Button>
+            </section>
             {returned && (
-              <section>
+              <section className="section2" style={{textAlign: "center"}}>
                 <Container>
                   <div className="box-main">
                     <Form style={{ margin: "20px" }}>
                       <Form.Label>Here is what your vehicle is scheduled for within +/-10,000 miles of subitted mileage:</Form.Label>
-                        {scheduleData && scheduleData.map((item, index) => (
-                          <div key={index}>
-                            <Row><Col>
+                      {scheduleData && scheduleData.map((item, index) => (
+                        <div key={index}>
+                          <Row><Col>
                             <h2>{item.desc}</h2>
                             <p>Due mileage: {item.due_mileage}</p>
                             <p>Due km: {item.due_km}</p>
@@ -330,16 +335,16 @@ const Maintenance = () => {
                               ))}
                             </ListGroup>
                             <hr />
-                            </Col></Row>
-                          </div>
-                        ))}
+                          </Col></Row>
+                        </div>
+                      ))}
                       <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="close" onClick={handleClose}>{"Close"}</Button>
                     </Form>
                   </div>
                 </Container>
               </section>
             )}
-            <section>
+            <section className="section3" style={{textAlign: "center"}}>
               {!noJobs ? (
                 <div>
                   <ListGroup>
@@ -347,7 +352,7 @@ const Maintenance = () => {
                     {jobs.map((job, index) => (
                       <ListGroupItem key={index}>
                         <Link to={`${process.env.PUBLIC_URL}/api/maintenance/job/${job._id}`}>
-                          <h6>{job.heading}</h6>
+                          <h4>{job.heading}</h4>
                         </Link>
                         <p style={{ fontSize: 12 }}>Posted by: {job.author}</p>
                         <p style={{ fontSize: 11, marginTop: -20 }}>Date: {job.date}</p>
@@ -362,11 +367,6 @@ const Maintenance = () => {
                 </div>
               )
               }
-            </section>
-            <section>
-              <Button as={Link} to={`${process.env.PUBLIC_URL}/api/maintenance/job/new`} variant="primary" style={{ margin: "20px", height: "auto", width: "auto" }}>
-                {"Add Procedure"}
-              </Button>
             </section>
           </div>
         </div>

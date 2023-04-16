@@ -4,6 +4,7 @@ import cel from "../images/CEL.png";
 import maint from "../images/Maint.png";
 import forums from "../images/Forums.png";
 import { UserContext } from './userContext';
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
 const MainPage = () => {
     const { user } = useContext(UserContext);
@@ -156,7 +157,7 @@ const MainPage = () => {
         if (!user) {
             return (
                 [
-                    <section className="section1" key="section0">
+                    <section className="section1" key="section0" style={{ textAlign: "center" }}>
                         <div className="box-main">
                             <div className="firstHalf"></div>
                             <h1 className="text-big" style={{ marginTop: "20px" }}>Welcome to AutoDiag!</h1>
@@ -187,40 +188,42 @@ const MainPage = () => {
         else {
             return (
                 [
-                    <section className="section1" key="section1">
+                    <section className="section1" key="section1" style={{ textAlign: "center" }}>
                         <div className="box-main">
                             <div className="firstHalf">
-                                <h1 className="text-big" style={{ marginTop: "20px" }}>Welcome to AutoDiag {` ${user.username}`}!</h1>
+                                <h1 className="text-big" >Welcome to AutoDiag {` ${user.username}`}!</h1>
                                 <p className="text-small">Diagnose your car with confidence.</p>
                                 <Link to={`${process.env.PUBLIC_URL}/diagnostics`}><img src={cel} width="auto" height="90" alt="diagnostics link" /></Link>
                             </div>
                         </div>
+                        <hr />
                         <div className="box-main">
                             <div className="secondHalf">
-                                <h1 className="text-big" id="program" style={{ marginTop: "100px" }}>Maintenance</h1>
+                                <h1 className="text-big" id="program">Maintenance</h1>
                                 <p className="text-small">No need to worry about finding the correct information. All necessary maintenance for YOUR car.</p>
                                 <Link to={`${process.env.PUBLIC_URL}/maintenance`}><img src={maint} width="auto" height="125" alt="maintenance link" /></Link>
                             </div>
                         </div>
+                        <hr />
                         <div className="box-main">
                             <div className="secondHalf">
-                                <h1 className="text-big" id="program" style={{ marginTop: "100px" }}>Message Board</h1>
+                                <h1 className="text-big" id="program">Message Board</h1>
                                 <p className="text-small">Browse the forums for everything related to YOUR car's year, make, and model.</p>
                                 <Link to={`${process.env.PUBLIC_URL}/forums`}><img src={forums} width="auto" height="200" alt="forums link" /></Link>
                             </div>
                         </div>
+                        <hr />
                         <div className="box-main">
                             <div className="secondHalf">
-                                <h1 className="text-big" id="program" style={{ marginTop: "100px" }}>
-                                    My Car:
-                                </h1>
-                                <p className="text-small">
-                                    Make: {make},<br />
-                                    Model: {model}, <br />
-                                    Series: {year}
-                                </p>
+                                <h1 className="text-big" id="program">My Car:</h1>
+                                <ListGroup style={{textAlign: "left"}}>
+                                    <ListGroupItem><b>Make:</b> {make}</ListGroupItem>
+                                    <ListGroupItem><b>Model:</b> {model}</ListGroupItem>
+                                    <ListGroupItem><b>Series:</b> {year}</ListGroupItem>
+                                </ListGroup>
                             </div>
                         </div>
+                        <hr />
                     </section>
                 ]
             )

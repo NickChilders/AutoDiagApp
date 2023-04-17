@@ -195,10 +195,10 @@ const PostPage = () => {
             &emsp;&emsp;{post.title}{user && user.username === post.author && (
               <>
                 <button className="btn dropdown-toggle-no-arrow p-0 border-0 bg-transparent" style={{ margin: "auto" }} type="button" id="postDropdownMenu" data-bs-toggle="dropdown">&emsp;<BsThreeDotsVertical /></button>
-                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="postDropdownMenu" style={{ width: "auto", height: "auto" }}>
-                  <li><Button className="dropdown-item" onClick={() => setShowEditPostModal(true)} style={{ width: "auto", height: "auto" }}>{"Edit"} <BsPencilSquare /></Button></li>
-                  <li><Button className="dropdown-item" onClick={handleDeleteConfirm} style={{ width: "auto", height: "auto" }}>{"Delete"} <BsTrash /></Button></li>
-                </ul>
+                <div className="dropdown-menu dropdown-menu-end" aria-labelledby="postDropdownMenu" style={{ width: "auto", height: "auto" }}>
+                  <Button className="dropdown-item" onClick={() => setShowEditPostModal(true)} style={{ width: "auto", height: "auto" }}>{"Edit"} <BsPencilSquare /></Button>
+                  <Button className="dropdown-item" onClick={handleDeleteConfirm} style={{ width: "auto", height: "auto" }}>{"Delete"} <BsTrash /></Button>
+                </div>
                 <Modal show={showEditPostModal} onHide={() => setShowEditPostModal(false)}>
                   <Modal.Header closeButton>
                     <Modal.Title>Edit Post</Modal.Title>
@@ -254,10 +254,10 @@ const PostPage = () => {
                         {user && user.username === comment.author && (
                           <>
                             <button className="btn dropdown-toggle-no-arrow p-0 border-0 bg-transparent" style={{ margin: "auto" }} type="button" id="postDropdownMenu" data-bs-toggle="dropdown">&emsp;<BsThreeDotsVertical /></button>
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="postDropdownMenu" style={{ width: "auto", height: "auto" }}>
-                              <li><Button className="dropdown-item" onClick={() => { handleEditComment(comment) }} style={{ width: "auto", height: "auto" }}>{"Edit"} <BsPencilSquare /></Button></li>
-                              <li><Button className="dropdown-item" onClick={() => {handleDeleteComment(comment._id)}} style={{ width: "auto", height: "auto" }}>{"Delete"} <BsTrash /></Button></li>
-                            </ul>
+                            <div className="dropdown-menu dropdown-menu-end" aria-labelledby="postDropdownMenu" style={{ width: "auto", height: "auto" }}>
+                              <Button className="dropdown-item" onClick={() => { handleEditComment(comment) }} style={{ width: "auto", height: "auto" }}>{"Edit"} <BsPencilSquare /></Button>
+                              <Button className="dropdown-item" onClick={() => {handleDeleteComment(comment._id)}} style={{ width: "auto", height: "auto" }}>{"Delete"} <BsTrash /></Button>
+                            </div>
                             <Modal show={showEditCommentModal} onHide={() => setShowEditCommentModal(false)}>
                               <Modal.Header closeButton>
                                 <Modal.Title>Edit Comment</Modal.Title>
@@ -274,8 +274,8 @@ const PostPage = () => {
                                       required
                                     />
                                   </Form.Group>
-                                  <Button variant="primary" type="submit">
-                                    Save Changes
+                                  <Button variant="primary" type="submit" style={{width:"auto", height:"auto", margin: "20px"}}>
+                                    {"Save Changes"}
                                   </Button>
                                 </Form>
                               </Modal.Body>

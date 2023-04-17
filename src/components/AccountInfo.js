@@ -355,7 +355,7 @@ const AccountInfo = () => {
                                     </h1>
                                 </Col>
                             </Row>
-                            {vehicles.length > 0 && (
+                            {vehicles.length > 1 && (
                                 <Row>
                                     <Col>
                                         <div>

@@ -234,6 +234,7 @@ With this CSS,
 
 .comment-text {
   font-size: 14px;
+  align-content: left;
 }
 
 ol {

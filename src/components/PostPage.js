@@ -105,12 +105,12 @@ const PostPage = () => {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }
     });
-    if(response.ok){
+    if (response.ok) {
       setContentChanged(true)
     }
   };
 
-  const handleDeleteComment = (commentId) =>{
+  const handleDeleteComment = (commentId) => {
     deleteComment(commentId);
     setContentChanged(false);
   }
@@ -207,7 +207,7 @@ const PostPage = () => {
                     <Form onSubmit={handleEditSubmit}>
                       <Form.Group controlId="postContent">
                         <Form.Label>Content</Form.Label>
-                        <Form.Control as="textarea" rows={3} value={newContent} onChange={(e) => setNewContent(e.target.value)} required/>
+                        <Form.Control as="textarea" rows={3} value={newContent} onChange={(e) => setNewContent(e.target.value)} required />
                       </Form.Group>
                       <Button variant="primary" type="submit">
                         Save Changes
@@ -242,12 +242,15 @@ const PostPage = () => {
             <div className="comment">{message}</div>
             :
             <>
+              <hr />
               {comments.map((comment) => (
                 <div key={comment._id} className="comment">
                   <div className="comment-content">
                     <Row>
                       <Col>
-                        <p className="comment-author">{comment.author} <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span></p>
+                        <p className="comment-author" style={{ borderRight: "double", borderBottom: "double", marginBottom: 20 }} >{comment.author} <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span></p>
+                      </Col>
+                      <Col>
                         <p className="comment-text">{comment.content}</p>
                       </Col>
                       <Col>
@@ -256,7 +259,7 @@ const PostPage = () => {
                             <button className="btn dropdown-toggle-no-arrow p-0 border-0 bg-transparent" style={{ margin: "auto" }} type="button" id="postDropdownMenu" data-bs-toggle="dropdown">&emsp;<BsThreeDotsVertical /></button>
                             <div className="dropdown-menu dropdown-menu-end" aria-labelledby="postDropdownMenu" style={{ width: "auto", height: "auto" }}>
                               <Button className="dropdown-item" onClick={() => { handleEditComment(comment) }} style={{ width: "auto", height: "auto" }}>{"Edit"} <BsPencilSquare /></Button>
-                              <Button className="dropdown-item" onClick={() => {handleDeleteComment(comment._id)}} style={{ width: "auto", height: "auto" }}>{"Delete"} <BsTrash /></Button>
+                              <Button className="dropdown-item" onClick={() => { handleDeleteComment(comment._id) }} style={{ width: "auto", height: "auto" }}>{"Delete"} <BsTrash /></Button>
                             </div>
                             <Modal show={showEditCommentModal} onHide={() => setShowEditCommentModal(false)}>
                               <Modal.Header closeButton>
@@ -274,7 +277,7 @@ const PostPage = () => {
                                       required
                                     />
                                   </Form.Group>
-                                  <Button variant="primary" type="submit" style={{width:"auto", height:"auto", margin: "20px"}}>
+                                  <Button variant="primary" type="submit" style={{ width: "auto", height: "auto", margin: "20px" }}>
                                     {"Save Changes"}
                                   </Button>
                                 </Form>
@@ -287,6 +290,7 @@ const PostPage = () => {
                   </div>
                 </div>
               ))}
+              <hr />
             </>
           }
         </div>

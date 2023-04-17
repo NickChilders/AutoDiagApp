@@ -3,7 +3,7 @@ import { BsClipboard2Check, BsWrench } from "react-icons/bs";
 import { MdManageAccounts, MdOutlineLogin, MdOutlineLogout, MdOutlineHome, MdOutlineForum } from "react-icons/md";
 import React, { useContext } from 'react';
 import { Link } from "react-router-dom";
-import logo from "./../images/logo192.png"
+import logo from "./../images/ADLOGO.png"
 import { UserContext } from "./userContext";
 
 const NavigationBar = () => {
@@ -16,12 +16,12 @@ const NavigationBar = () => {
                     {
                         user ? (
                             <div style={{ color: "var(--bs-nav-link-color)", fontSize: 28 }}>
-                                <img src={logo} width="auto" height="40" alt="random logo" />
+                                <img src={logo} width="auto" height="50" alt="random logo" />
                                     &emsp; AutoDiag
                             </div>
                         ) : (
                             <div style={{ color: "var(--bs-nav-link-color)", fontSize: 28 }}>
-                                <img src={logo} width="auto" height="40" alt="random logo" />
+                                <img src={logo} width="auto" height="50" alt="random logo" />
                                     &emsp;AutoDiag
                             </div>
                         )

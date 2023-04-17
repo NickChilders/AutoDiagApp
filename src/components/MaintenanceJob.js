@@ -42,10 +42,18 @@ const MaintenanceJob = () => {
       </section>
 
       <hr />
-      <ListGroup>
+      <ListGroup as="ul" numbered>
+       
         {steps.map((step, index) => (
           <ListGroupItem key={index}>
             {step.description}
+            {step.imageUrl && (
+              <div className='box-main'>
+                <ListGroupItem key={`img-${index}`}>
+                <img src={step.imageUrl} width="auto" height="200" alt="test image" />
+                </ListGroupItem>
+                </div>
+            )}
           </ListGroupItem>
         ))}
       </ListGroup>

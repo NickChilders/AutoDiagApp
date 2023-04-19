@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Form, Button, Container, NavLink, Alert, Row, Col} from 'react-bootstrap';
-import { PencilSquare }from 'react-bootstrap-icons';
+import { PencilSquare, Lock }from 'react-bootstrap-icons';
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from './userContext';
 
@@ -84,19 +84,17 @@ const LoginPage = () => {
                 </Col>
               </Row>
             </Form.Group>
-            
             <Form.Group>
-              
               <div className="btn-group">
                 <Button style={{ width: "auto", height:"auto", margin: "20px" }} variant="primary" type="submit">Submit</Button>
               </div>
               <div className='link'>
                     <NavLink style={{margin: "20px"}} eventkey="4" as={Link} to={`${process.env.PUBLIC_URL}/register`} >&emsp;Need to Register?&emsp;<PencilSquare /></NavLink>
+                    <NavLink style={{margin: "20px"}} eventkey="5" as={Link} to={`${process.env.PUBLIC_URL}/reset-password`} >&emsp;Forgot Password?&emsp;<Lock /></NavLink>
               </div>
             </Form.Group>
           </Form>
         </Container>
-        
       </div>
     </div>
   );

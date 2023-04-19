@@ -16,6 +16,8 @@ import { BsClipboard2Check, BsWrench } from "react-icons/bs";
 import { MdManageAccounts, MdOutlineLogin, MdOutlineLogout, MdOutlineHome, MdOutlineForum } from "react-icons/md";
 import MaintenanceNewJob from './components/MaintenanceNewJob';
 import MaintenanceJob from './components/MaintenanceJob';
+import PasswordResetPage from './components/PasswordResetPage';
+import PasswordResetLinkPage from './components/PasswordResetLinkPage';
 
 
 function App() {
@@ -59,6 +61,8 @@ function App() {
             <Route exact path={`${process.env.PUBLIC_URL}/api/posts/:id`} element={<PostPage />} />
             <Route exact path={`${process.env.PUBLIC_URL}/api/maintenance/job/:id`} element={<MaintenanceJob />} />
             <Route exact path={`${process.env.PUBLIC_URL}/api/maintenance/job/new`} element={<MaintenanceNewJob />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/reset-password`} element={<PasswordResetPage />} />
+            <Route exact path={`${process.env.PUBLIC_URL}/reset-password/:id`} element={<PasswordResetLinkPage />} />
           </Routes>
           <footer className="footer">               
             <p className="text-footer">

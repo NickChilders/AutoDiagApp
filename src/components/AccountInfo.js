@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from './userContext';
-import { MdArrowForward, MdArrowBack } from "react-icons/md";
+import { MdArrowForward, MdArrowBack, MdClose } from "react-icons/md";
 import { Row, Col, Button, Container, Form, Alert, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 const AccountInfo = () => {
@@ -16,6 +16,7 @@ const AccountInfo = () => {
     const [newVin, setNewVin] = useState('');
     const [successful, setSuccessful] = useState('');
     const [addError, setAddError] = useState('');
+    const [switchAlert, setSwitchAlert] = useState(false)
 
     /********************************************************************\  
         Desc.:  Fetch data from the specified URL and update the state
@@ -261,10 +262,8 @@ const AccountInfo = () => {
     const handleClickNext = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
-        console.log("Current index:", currentIndex)
         // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
         const newIndex = currentIndex === vehicles.length - 1 ? 0 : currentIndex + 1;
-        console.log("new index:", newIndex)
         // Set the current index to the new index.
         setCurrentIndex(newIndex);
         // Set various pieces of vehicle information using the data for the new index in the vehicles array.
@@ -285,6 +284,7 @@ const AccountInfo = () => {
             .then((data) => console.log(data))
             // If an error occurs, log the error to the console.
             .catch((error) => console.log(error));
+        setSwitchAlert(true);
     };
 
 
@@ -296,7 +296,7 @@ const AccountInfo = () => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
         // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
-        const newIndex = currentIndex == 0 ? vehicles.length-1 : currentIndex-1
+        const newIndex = currentIndex === 0 ? vehicles.length - 1 : currentIndex - 1
         // Set the current index to the new index.
         setCurrentIndex(newIndex);
         // Set various pieces of vehicle information using the data for the new index in the vehicles array.
@@ -317,8 +317,12 @@ const AccountInfo = () => {
             .then((data) => console.log(data))
             // If an error occurs, log the error to the console.
             .catch((error) => console.log(error));
+        setSwitchAlert(true);
     };
 
+    const closeAlert = () => {
+        setSwitchAlert(false);
+    }
 
     /**********************************************************************************\
         Desc.:  This function deletes a vehicle from a user's vehicles array in the server.
@@ -359,8 +363,6 @@ const AccountInfo = () => {
             setAddError(error.message);
         }
     };
-
-
     const handleClickDelete = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
@@ -385,22 +387,11 @@ const AccountInfo = () => {
                                 <Col>
                                     <h1 className="text-big">
                                         <div>
-                                            {user && user.username} Account Information &emsp;
+                                            {user && user.username}'s Account Information &emsp;
                                         </div>
                                     </h1>
                                 </Col>
                             </Row>
-                            {vehicles.length > 1 && (
-                                <Row>
-                                    <Col>
-                                        <div>
-                                            <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="next" onClick={handleClickPrev}>{" "}<MdArrowBack />{" "}</Button>
-                                            Want to Switch vehicles?
-                                            <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="next" onClick={handleClickNext}>{" "}<MdArrowForward />{" "}</Button>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            )}
                             <Row style={{ display: "flow-root" }}>
                                 <Col>
                                     <div style={{ display: "inline-block" }}>
@@ -437,7 +428,7 @@ const AccountInfo = () => {
                             <Row style={{ display: "flow-root" }}>
                                 <Col>
                                     {addError && <Alert variant="danger">{addError}</Alert>}
-                                    {successful && <Alert>{successful}</Alert>}
+                                    {successful && <Alert variant='success'>{successful}</Alert>}
                                 </Col>
                             </Row>
                         </div>
@@ -448,6 +439,30 @@ const AccountInfo = () => {
                         <img src={imgUrl} width="auto" height="250" alt="users car" />
                     </div>
                 </section>
+                <div className='box-main'>Want to switch your main vehicle?</div>
+                {switchAlert &&
+                    (
+                        <Alert className="alert alert-success alert-dismissable" data-dismiss="alert" aria-label="close">
+                            <p  style={{textAlign:"end"}}><u onClick={closeAlert}>Close{" "}<MdClose onClick={closeAlert} />{" "}</u></p>
+                            <p style={{ textAlign: "center" }}>
+                                <u>Your main vehcile has been switched to your {make} {model}.</u>
+                            </p>
+                            <div style={{ marginLeft: "auto" }}></div>
+                        </Alert>
+                    )
+                }
+                <div className='box-main'>
+                    {vehicles.length > 1 && (
+                        <Row>
+                            <Col>
+                                <div>
+                                    <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="previous" onClick={handleClickPrev}>{" "}<MdArrowBack />Prev</Button>
+                                    <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="next" onClick={handleClickNext}>Next<MdArrowForward />{" "}</Button>
+                                </div>
+                            </Col>
+                        </Row>
+                    )}
+                </div>
                 <section className="section2" style={{ textAlign: "left" }}>
                     <div className="box-main">
                         <ListGroup>

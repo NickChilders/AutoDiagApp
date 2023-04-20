@@ -53,7 +53,7 @@ const PasswordResetPage = () => {
                         <h1 text-align="center">Password Reset</h1>
                         {resetError && <Alert variant="danger">{resetError}</Alert>}
                         {resetSuccess ? (
-                            <Alert variant="success">An email has been sent to your account.</Alert>
+                            <Alert variant="success">A password reset link has been sent to your email. You may close this window.</Alert>
                         ) : (
                             <Form style={{ margin: '20px' }} onSubmit={handleSubmit}>
                                 <Form.Group controlId="formBasicEmail">

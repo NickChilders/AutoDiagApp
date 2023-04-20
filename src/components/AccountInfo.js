@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from './userContext';
-import { MdArrowForward } from "react-icons/md";
-import { Row, Col, Button, Container, Form, Alert, ListGroup,ListGroupItem } from 'react-bootstrap';
+import { MdArrowForward, MdArrowBack } from "react-icons/md";
+import { Row, Col, Button, Container, Form, Alert, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 const AccountInfo = () => {
     const { user } = useContext(UserContext);
@@ -261,8 +261,10 @@ const AccountInfo = () => {
     const handleClickNext = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
+        console.log("Current index:", currentIndex)
         // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
         const newIndex = currentIndex === vehicles.length - 1 ? 0 : currentIndex + 1;
+        console.log("new index:", newIndex)
         // Set the current index to the new index.
         setCurrentIndex(newIndex);
         // Set various pieces of vehicle information using the data for the new index in the vehicles array.
@@ -284,6 +286,47 @@ const AccountInfo = () => {
             // If an error occurs, log the error to the console.
             .catch((error) => console.log(error));
     };
+
+
+    /*************************************************************************************************\  
+        Desc.:  Handles when the user clicks the 'Prev' Button.
+                Once clicked, the next element in the vehicles array will be set as the main vehicle.
+    ***************************************************************************************************/
+    const handleClickPrev = async (event) => {
+        // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
+        event.preventDefault();
+        console.log("Current index:", currentIndex)
+        // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
+        let newIndex = 0
+        if (currentIndex == 0){
+            newIndex = vehicles.length - 1;
+        }
+        else{
+            newIndex = currentIndex - 1;
+        }
+        console.log("New index:", newIndex)
+        // Set the current index to the new index.
+        setCurrentIndex(newIndex);
+        // Set various pieces of vehicle information using the data for the new index in the vehicles array.
+        setVin(vehicles[newIndex].vehicleVIN);
+        setImgUrl(vehicles[newIndex].vehicleImgUrl);
+        setMake(vehicles[newIndex].vehicleMake);
+        setModel(vehicles[newIndex].vehicleModel);
+        setYear(vehicles[newIndex].vehicleYear);
+        // Send a PUT request to update the user's main vehicle with the vehicle VIN for the new index.
+        await fetch(`http://localhost:3001/users/${user.token}/main-vehicle/${vehicles[newIndex].vehicleVIN}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            // Convert the response to JSON and log the data to the console.
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            // If an error occurs, log the error to the console.
+            .catch((error) => console.log(error));
+    };
+
 
     /**********************************************************************************\
         Desc.:  This function deletes a vehicle from a user's vehicles array in the server.
@@ -343,7 +386,7 @@ const AccountInfo = () => {
     return (
         <div>
             <div className="index_body">
-                <section className="section0" style={{textAlign: "center"}}>
+                <section className="section0" style={{ textAlign: "center" }}>
                     <div className="box-main">
                         <div className="firstHalf">
                             <Row>
@@ -359,6 +402,7 @@ const AccountInfo = () => {
                                 <Row>
                                     <Col>
                                         <div>
+                                            <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="next" onClick={handleClickPrev}>{" "}<MdArrowBack />{" "}</Button>
                                             Want to Switch vehicles?
                                             <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="next" onClick={handleClickNext}>{" "}<MdArrowForward />{" "}</Button>
                                         </div>
@@ -412,7 +456,7 @@ const AccountInfo = () => {
                         <img src={imgUrl} width="auto" height="250" alt="users car" />
                     </div>
                 </section>
-                <section className="section2" style={{textAlign: "left"}}>
+                <section className="section2" style={{ textAlign: "left" }}>
                     <div className="box-main">
                         <ListGroup>
                             <ListGroupItem><b>Vehicle VIN:</b> &emsp;{vin}</ListGroupItem>

@@ -295,16 +295,8 @@ const AccountInfo = () => {
     const handleClickPrev = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
-        console.log("Current index:", currentIndex)
         // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
-        let newIndex = 0
-        if (currentIndex == 0){
-            newIndex = vehicles.length - 1;
-        }
-        else{
-            newIndex = currentIndex - 1;
-        }
-        console.log("New index:", newIndex)
+        const newIndex = currentIndex == 0 ? vehicles.length-1 : currentIndex-1
         // Set the current index to the new index.
         setCurrentIndex(newIndex);
         // Set various pieces of vehicle information using the data for the new index in the vehicles array.

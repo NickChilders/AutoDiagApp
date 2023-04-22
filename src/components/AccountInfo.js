@@ -439,30 +439,36 @@ const AccountInfo = () => {
                         <img src={imgUrl} width="auto" height="250" alt="users car" />
                     </div>
                 </section>
-                <div className='box-main'>Want to switch your main vehicle?</div>
                 {switchAlert &&
                     (
                         <Alert className="alert alert-success alert-dismissable" data-dismiss="alert" aria-label="close">
-                            <p  style={{textAlign:"end"}}><u onClick={closeAlert}>Close{" "}<MdClose onClick={closeAlert} />{" "}</u></p>
+                            <p style={{ textAlign: "end" }}><u onClick={closeAlert}>Close{" "}<MdClose onClick={closeAlert} />{" "}</u></p>
                             <p style={{ textAlign: "center" }}>
-                                <u>Your main vehcile has been switched to your {make} {model}.</u>
+                                <u>Your main vehicle has been switched to your {make} {model}.</u>
                             </p>
                             <div style={{ marginLeft: "auto" }}></div>
                         </Alert>
                     )
                 }
-                <div className='box-main'>
-                    {vehicles.length > 1 && (
-                        <Row>
-                            <Col>
-                                <div>
-                                    <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="previous" onClick={handleClickPrev}>{" "}<MdArrowBack />Prev</Button>
-                                    <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="next" onClick={handleClickNext}>Next<MdArrowForward />{" "}</Button>
-                                </div>
-                            </Col>
-                        </Row>
-                    )}
-                </div>
+
+                {vehicles.length > 1 && (
+                    <>
+                        <div className='box-main'>
+                            Want to switch your main vehicle?
+                        </div>
+                        <div className='box-main'>
+                            <Row>
+                                <Col>
+                                    <div>
+                                        <Button style={{ width: "auto", height: "auto", margin: "10px", }} variant="primary" type="previous" onClick={handleClickPrev}>{" "}<MdArrowBack />Prev</Button>
+                                        <Button style={{ width: "auto", height: "auto", margin: "10px", }} variant="primary" type="next" onClick={handleClickNext}>Next<MdArrowForward />{" "}</Button>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+                    </>
+                )}
+
                 <section className="section2" style={{ textAlign: "left" }}>
                     <div className="box-main">
                         <ListGroup>

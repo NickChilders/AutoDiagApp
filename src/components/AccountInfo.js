@@ -223,6 +223,7 @@ const AccountInfo = ({ onNavChange }) => {
                 vehicleYear: data.vehicleYear,
                 vehicleImgUrl: data.vehicleImgUrl
             }]);
+            setCurrentIndex(vehicles.length-1);
             setSuccessful(true)
             //Catch an error and then set an error message to be displayed.
         } catch (error) {

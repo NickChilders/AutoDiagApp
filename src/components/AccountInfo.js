@@ -16,6 +16,7 @@ const AccountInfo = ({ onNavChange }) => {
     const [add, setAdd] = useState(false);
     const [newVin, setNewVin] = useState('');
     const [successful, setSuccessful] = useState(false);
+    const [deleteSuccessful, setDeleteSuccessful] = useState(false);
     const [addError, setAddError] = useState('');
     const [switchAlert, setSwitchAlert] = useState(false)
 
@@ -173,6 +174,9 @@ const AccountInfo = ({ onNavChange }) => {
     // Once clicked, the user can add a vehicle by entering information.
     const handleClickAdd = async (event) => {
         event.preventDefault();
+        setSuccessful(false);
+        setDeleteSuccessful(false);
+        setNewVin('');
         setAdd(true);
     }
 
@@ -256,6 +260,8 @@ const AccountInfo = ({ onNavChange }) => {
     const handleNewVehicle = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
+        setDeleteSuccessful(false);
+        setSuccessful(false);
         //  Fetch the vehicle information.
         await fetchVehicleInfo(user.username, newVin);
         //  Close the form to add a vehicle.
@@ -279,6 +285,7 @@ const AccountInfo = ({ onNavChange }) => {
     const handleClickNext = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
+        setDeleteSuccessful(false);
         setSuccessful(false);
         // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
         const newIndex = currentIndex === vehicles.length - 1 ? 0 : currentIndex + 1;
@@ -315,6 +322,7 @@ const AccountInfo = ({ onNavChange }) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
         setSuccessful(false);
+        setDeleteSuccessful(false);
         // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
         const newIndex = currentIndex === 0 ? vehicles.length - 1 : currentIndex - 1
         // Set the current index to the new index.
@@ -351,6 +359,7 @@ const AccountInfo = ({ onNavChange }) => {
                 vin: vin number (required).
     ***********************************************************************************/
     const deleteUserVehicle = async (token, vin) => {
+        setDeleteSuccessful(false);
         // Construct the request options for a POST request to the server
         const requestOptions = {
             method: 'DELETE',
@@ -377,7 +386,7 @@ const AccountInfo = ({ onNavChange }) => {
 
             // Grab the response in JSON format then set a success message to be displayed.
             const data = await response.json();
-            setSuccessful(`${data.message}. You may need to refresh the page.`);
+            setDeleteSuccessful(true);
         } catch (error) {
             // Catch an error and then set an error message to be displayed.
             console.error(error);
@@ -387,6 +396,8 @@ const AccountInfo = ({ onNavChange }) => {
     const handleClickDelete = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
+        setSuccessful(false);
+        setDeleteSuccessful(false);
         // Display a confirmation dialog to the user
         const confirmDelete = window.confirm("Are you sure you want to remove this vehicle?");
 
@@ -453,6 +464,7 @@ const AccountInfo = ({ onNavChange }) => {
                                 <Col>
                                     {addError && <Alert variant="danger">{addError}</Alert>}
                                     {successful && <Alert variant='success'>Successfully added a vehicle. You may need to refresh the page.</Alert>}
+                                    {deleteSuccessful && <Alert variant='success'>Successfully removed vehicle. You may need to refresh the page.</Alert>}
                                 </Col>
                             </Row>
                         </div>

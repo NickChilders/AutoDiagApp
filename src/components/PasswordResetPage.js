@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import NavigationBar from './NavigationBar';
 
 const PasswordResetPage = () => {
     const navigate = useNavigate();
@@ -46,6 +47,7 @@ const PasswordResetPage = () => {
 
     return (
         <div>
+            <NavigationBar />
             <p>&emsp;</p>
             <div className="index_body">
                 <div className='box-main'>

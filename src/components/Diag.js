@@ -6,6 +6,7 @@ import { Pie } from 'react-chartjs-2'
 import ChartDataLabelsPlugin from 'chartjs-plugin-datalabels';
 import 'chart.js/auto';
 import Chart from 'chart.js/auto';
+import NavigationBar from "./NavigationBar";
 
 const Diagnostics = () => {
   const { user } = useContext(UserContext);
@@ -408,9 +409,10 @@ const Diagnostics = () => {
     if (!user) {
       return (
         <div>
+          <NavigationBar />
           <div className="index_body">
             <section className="section" >
-              <div className="box-main" >
+              <div className="box-main" style={{marginTop: "20px"}}>
                 <div className="firstHalf">
                   <h1 className="text-big">
                     Diagnostics &emsp;
@@ -439,66 +441,77 @@ const Diagnostics = () => {
     else {
       return (
         <div>
+          <NavigationBar make={make} model={model} year={year} />
           <div className="index_body">
-            <section className="section" >
-              <div className="box-main" >
-                <div className="firstHalf">
-                  <h1 className="text-big">
-                    Diagnostics &emsp;
-                  </h1>
-                  <p>Currently diagnosing your {year} {make} {model}</p>
-                </div>
+            <section className="topSection">
+            <div className="box-main" style={{marginTop: "20px"}} >
+              <div className="firstHalf">
+                <h1 className="text-big" style={{textAlign:"center"}}>Diagnostics &emsp;</h1>
+                <p>Currently diagnosing your <u>{year} {make} {model}</u></p>
+                <hr />
               </div>
+            </div>
+            </section>
+            
+            <section className="section0">
+              <div className="box-main">
+                {!obdSuccess && (
+                  <div className="firstHalf">
+                    <p style={{ textAlign: "left" }}>You can obtain your check engine light code from most part stores for free.</p>
+                    <p style={{ textAlign: "left" }}>Once you have your code, input it here and see the different causes.</p>
+
+                    <input type="text" name="search" id="search" placeholder="Code Example: P0001" value={obd} onChange={(event) => setObd(event.target.value)} />
+                    <Button className="btn btn-large btn-group" type="submit" style={{ margin: "10px", height: "auto", width: "auto" }} onClick={handleObdSearch}>{'Search Code'}</Button>
+                  </div>
+                )}
+              </div>
+              {obdSuccess && (
+                <>
+                  <div className="box-main">
+                    {obdError ? (
+                      <>
+                        {`${process.env.REACT_APP_OBD_RESPONSE_FAIL}`}
+                      </>
+                    ) : (
+                      <h4>Code: {searchedObd}</h4>
+                    )}
+                  </div>
+                  <div className="box-main">
+                    <h5>Meaning: {obdDefinition}</h5>
+                  </div>
+                  <div className="box-main">
+                    <h6><u>Possible Causes</u>:</h6>
+                  </div>
+                  <div className="box-main">
+                    <Row>
+                      <Col>
+                        <ListGroup as="ol" className="numbered-list">
+                          {obdCause.map((cause, index) => (
+                            <Row key={index}>
+                              <Col>
+                                <ListGroup.Item as="li" key={index}>{cause}</ListGroup.Item>
+                              </Col>
+                            </Row>
+                          ))}
+                        </ListGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                  <div className="box-main">
+                    Search Another Code?
+                    <Button className="btn btn-sm btn-group" type="submit" style={{ margin: "20px", height: "auto", width: "auto" }} onClick={handleYes}> {'Yes'}</Button>
+                  </div>
+                </>
+              )}
+            </section>
+            <hr />
+            <section>
+              <h4>Issue but no code?</h4>
+              <p>Sometimes, we experience issues and there are no codes.</p>
+              <p>Click the button below to input a symptom and see what other users have done to correct it.</p>
             </section>
             <div className="box-main">
-              {!obdSuccess && (
-                <div className="firstHalf">
-                  <input type="text" name="search" id="search" placeholder="(Ex: P0001)" value={obd} onChange={(event) => setObd(event.target.value)} />
-                  <Button className="btn btn-large btn-group" type="submit" style={{ margin: "10px", height: "auto", width: "auto" }} onClick={handleObdSearch}>{'CEL Code'}</Button>
-                </div>
-              )}
-            </div>
-            {obdSuccess && (
-              <>
-                <div className="box-main">
-                  {obdError ? (
-                    <>
-                      {`${process.env.REACT_APP_OBD_RESPONSE_FAIL}`}
-                    </>
-                  ) : (
-                    <h4>Code: {searchedObd}</h4>
-                  )}
-                </div>
-                <div className="box-main">
-                  <h5>Meaning: {obdDefinition}</h5>
-                </div>
-                <div className="box-main">
-                  <h6><u>Possible Causes</u>:</h6>
-                </div>
-                <div className="box-main">
-                  <Row>
-                    <Col>
-                      <ListGroup as="ol" className="numbered-list">
-                        {obdCause.map((cause, index) => (
-                          <Row key={index}>
-                            <Col>
-                              <ListGroup.Item as="li" key={index}>{cause}</ListGroup.Item>
-                            </Col>
-                          </Row>
-                        ))}
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </div>
-                <div className="box-main">
-                  Search Another Code?
-                  <Button className="btn btn-sm btn-group" type="submit" style={{ margin: "20px", height: "auto", width: "auto" }} onClick={handleYes}> {'Yes'}</Button>
-                </div>
-              </>
-            )}
-            <div className="box-main">
               <Button style={{ width: "auto", height: "auto", margin: "20px", }} variant="primary" type="search" onClick={(e) => { handleAlert(e); handleClickSearch(e); }}>{"Diagnose Symptoms"}</Button>
-              <Button style={{ width: "auto", height: "auto", margin: "20px", backgroundColor: "orange", borderColor: "orange" }} variant="primary" onClick={handleAddFixClick}>{"Submit Solution"}</Button>
             </div>
             {diagSearch && (
               <Container>
@@ -539,6 +552,7 @@ const Diagnostics = () => {
               </>
             )}
           </section>
+          <hr />
           <section>
             {displayChart && (
               <>
@@ -606,11 +620,13 @@ const Diagnostics = () => {
               </div>
             )}
             <div className="box-main">
-              <p>When you solve your issue, we ask that you input what worked to help other users.</p>
+              When you solve your issue, we ask that you input what worked to help other users.
+              <Button style={{ width: "auto", height: "auto", margin: "20px", backgroundColor: "orange", borderColor: "orange" }} variant="primary" onClick={handleAddFixClick}>{"Submit Solution"}</Button>
               <br />
               <br />
             </div>
           </section>
+          <hr />
         </div >
       )
     }

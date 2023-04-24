@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { UserContext } from './userContext';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import NavigationBar from './NavigationBar';
 
 const RegistrationPage = () => {
   const { user, setUser } = useContext(UserContext);
@@ -82,6 +83,9 @@ const RegistrationPage = () => {
   };
 
   return (
+    <div>
+      <NavigationBar />
+    
     <Container>
       <Form action={`${process.env.PUBLIC_URL}/register`} style={{ margin: "20px" }} onSubmit={handleSubmit}>
         <Row>
@@ -130,7 +134,7 @@ const RegistrationPage = () => {
         </div>
       </Form>
     </Container>
-
+    </div>
   );
 };
 

@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import { UserContext } from './userContext';
 import PostPreview from "./PostPreview";
+import NavigationBar from "./NavigationBar";
 
 const Forums = () => {
   const { user } = useContext(UserContext);
@@ -233,6 +234,7 @@ const Forums = () => {
     if (!user) {
       return (
         <div>
+          <NavigationBar />
           <div className="index_body">
             <section className="section" >
               <div className="box-main" >
@@ -255,7 +257,7 @@ const Forums = () => {
                   <NavLink eventkey="1" as={Link} to={`${process.env.PUBLIC_URL}/register`} href={`${process.env.PUBLIC_URL}/register`}>Register</NavLink>
                   &nbsp; To Continue.
                 </p>
-                </div>    
+              </div>
             </div>
           </div>
         </div>
@@ -263,79 +265,83 @@ const Forums = () => {
     }
     else {
       return (
-        <Container>
-          <div className="index_body">
-            <section className="section0" >
-              <div className="box-main" >
-                <div className="firstHalf">
-                  <h1 className="text-big">
-                    Forums &emsp;
-                  </h1>
-                  <p className="text-small">
-                    Talk among others that have the same car as you.
-                  </p>
-                  <div>
-                    <input type="text" name="search" id="search" placeholder="Search the forums..." value={search} onChange={(event) => setSearch(event.target.value)} />
-                    <Button className="btn btn-sm" type="submit" style={{ margin: "20px" }} onClick={handleSearch}>{'Search'}</Button>
+        <div>
+          <NavigationBar make={make} model={model} year={year} />,
+          <Container>
+            <div className="index_body">
+              <section className="section0" >
+                <div className="box-main" >
+                  <div className="firstHalf">
+                    <h1 className="text-big">
+                      Forums &emsp;
+                    </h1>
+                    <p className="text-small">
+                      Talk among others that have the same car as you.
+                    </p>
+                    <hr />
+                    <div>
+                      <input type="text" name="search" id="search" placeholder="Search the forums..." value={search} onChange={(event) => setSearch(event.target.value)} />
+                      <Button className="btn btn-sm" type="submit" style={{ margin: "20px" }} onClick={handleSearch}>{'Search'}</Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <hr />
-            </section>
-            <section className="section1">
-              <div className="box-main">
-                {showForm ? (
-                  <div className="post-form">
-                    <Form onSubmit={handleSubmit}>
-                      <h3>Create a new post</h3>
-                      <div className="form-group">
-                        <Form.Label htmlFor="title">Title</Form.Label>
-                        <input type="text" className="form-control" id="title" name="title" placeholder="Enter title" value={title} onChange={handleTitleChange} />
-                      </div>
-                      <div className="form-group">
-                        <Form.Label htmlFor="content">Content</Form.Label>
-                        <textarea className="form-control" id="content" name="content" rows="4" cols="75" placeholder="Enter content..." value={content} onChange={handleContentChange}></textarea>
-                      </div>
-                      <div className='btn-group'>
-                        <Button className="btn btn-sm" style={{ margin: "20px" }} variant="primary" type="submit" >{'Submit'}</Button>
-                      </div>
-                      <div className="btn-group">
-                        <Button className="btn btn-sm" style={{ backgroundColor: "red", borderColor: "red" }} onClick={() => setShowForm(false)}>Cancel</Button>
-                      </div>
-                    </Form>
+                <hr />
+              </section>
+              <section className="section1">
+                <div className="box-main">
+                  {showForm ? (
+                    <div className="post-form">
+                      <Form onSubmit={handleSubmit}>
+                        <h3>Create a new post</h3>
+                        <div className="form-group">
+                          <Form.Label htmlFor="title">Title</Form.Label>
+                          <input type="text" className="form-control" id="title" name="title" placeholder="Enter title" value={title} onChange={handleTitleChange} />
+                        </div>
+                        <div className="form-group">
+                          <Form.Label htmlFor="content">Content</Form.Label>
+                          <textarea className="form-control" id="content" name="content" rows="4" cols="75" placeholder="Enter content..." value={content} onChange={handleContentChange}></textarea>
+                        </div>
+                        <div className='btn-group'>
+                          <Button className="btn btn-sm" style={{ margin: "20px" }} variant="primary" type="submit" >{'Submit'}</Button>
+                        </div>
+                        <div className="btn-group">
+                          <Button className="btn btn-sm" style={{ backgroundColor: "red", borderColor: "red" }} onClick={() => setShowForm(false)}>Cancel</Button>
+                        </div>
+                      </Form>
 
-                  </div>
-                ) : (
-                  <Button className="btn btn-sm" style={{ margin: "20px", width: "200px" }} onClick={() => setShowForm(true)}>Create a new post</Button>
-                )}
-              </div>
-            </section>
-            {posts.length > 0 ? (
-              <table className="post-table">
-                <thead>
-                  <tr>
-                    <th>Posts</th>
-                    <th>Replies</th>
-                    <th>Posted by</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPosts.length > 0 ? (
-                    filteredPosts.map((post) => (
-                      <PostPreview key={post._id} post={post} />
-                    ))
+                    </div>
                   ) : (
-                    posts.map((post) => (
-                      <PostPreview key={post._id} post={post} />
-                    ))
+                    <Button className="btn btn-sm" style={{ margin: "20px", width: "200px" }} onClick={() => setShowForm(true)}>Create a new post</Button>
                   )}
-                </tbody>
-              </table>
-            ) : (
-              <p>There are no discussions yet. Create a post and get the conversation going!</p>
-            )}
-          </div>
-        </Container>
+                </div>
+              </section>
+              {posts.length > 0 ? (
+                <table className="post-table">
+                  <thead>
+                    <tr>
+                      <th>Posts</th>
+                      <th>Replies</th>
+                      <th>Posted by</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredPosts.length > 0 ? (
+                      filteredPosts.map((post) => (
+                        <PostPreview key={post._id} post={post} />
+                      ))
+                    ) : (
+                      posts.map((post) => (
+                        <PostPreview key={post._id} post={post} />
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              ) : (
+                <p>There are no discussions yet. Create a post and get the conversation going!</p>
+              )}
+            </div>
+          </Container>
+        </div>
       );
     }
   }

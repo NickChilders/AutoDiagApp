@@ -3,6 +3,7 @@ import { Form, Button, Container, NavLink, Alert, Row, Col} from 'react-bootstra
 import { PencilSquare, Lock }from 'react-bootstrap-icons';
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from './userContext';
+import NavigationBar from './NavigationBar';
 
 const LoginPage = () => {
   const {setUser} = useContext(UserContext);
@@ -61,6 +62,7 @@ const LoginPage = () => {
   
   return (
     <div>
+      <NavigationBar />
       <p>&emsp;</p>
       <div className="index_body">
         <Container>

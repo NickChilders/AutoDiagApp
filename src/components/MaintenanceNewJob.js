@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { UserContext } from './userContext';
+import NavigationBar from "./NavigationBar";
 
 const MaintenanceNewJob = () => {
     const { user } = useContext(UserContext);
@@ -201,12 +202,13 @@ const MaintenanceNewJob = () => {
     };
     return (
         <div>
+            <NavigationBar make={make} model={model} year={year} />
             <div className="index_body">
                 <section>
                     <Container>
-                        <div className="box-main">
+                        <div className="box-main" style={{marginTop: "20px"}}>
                             <div className="job-form">
-                                <h1>New Job</h1>
+                                <h1>New Job <hr /></h1>
                                 <Form onSubmit={handleSubmit}>
                                     <div className="form-group">
                                         <Form.Label htmlFor="heading">Heading</Form.Label>

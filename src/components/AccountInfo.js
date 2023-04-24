@@ -1,9 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { UserContext } from './userContext';
 import { MdArrowForward, MdArrowBack, MdClose } from "react-icons/md";
 import { Row, Col, Button, Container, Form, Alert, ListGroup, ListGroupItem } from 'react-bootstrap';
+import NavigationBar from './NavigationBar';
 
-const AccountInfo = () => {
+const AccountInfo = ({ onNavChange }) => {
     const { user } = useContext(UserContext);
     const [imgUrl, setImgUrl] = useState('');
     const [vin, setVin] = useState('');
@@ -14,9 +15,18 @@ const AccountInfo = () => {
     const [vehicles, setVehicles] = useState([]);
     const [add, setAdd] = useState(false);
     const [newVin, setNewVin] = useState('');
-    const [successful, setSuccessful] = useState('');
+    const [successful, setSuccessful] = useState(false);
     const [addError, setAddError] = useState('');
     const [switchAlert, setSwitchAlert] = useState(false)
+
+    const handleNav = (make, model, year) => {
+        onNavChange([make, model, year]);
+    }
+
+    useEffect(() => {
+        handleNav(make, model, year)
+    }, [make, model, year]);
+
 
     /********************************************************************\  
         Desc.:  Fetch data from the specified URL and update the state
@@ -39,6 +49,7 @@ const AccountInfo = () => {
             setMake(data.vehicleMake);
             setModel(data.vehicleModel);
             setYear(data.vehicleYear);
+            handleNav(make, model, year);
             // Store the entire data object in local storage
             localStorage.setItem('userData', JSON.stringify(data));
         } catch (error) {
@@ -64,6 +75,7 @@ const AccountInfo = () => {
             setMake(vehicles[newIndex].vehicleMake);
             setModel(vehicles[newIndex].vehicleModel);
             setYear(vehicles[newIndex].vehicleYear);
+            handleNav(make, model, year);
         }
     }, [vehicles]);
 
@@ -89,6 +101,7 @@ const AccountInfo = () => {
                 setMake(mainVehicle.vehicleMake);
                 setModel(mainVehicle.vehicleModel);
                 setYear(mainVehicle.vehicleYear);
+                handleNav(make, model, year);
             } else if (userData.vehicles.length > 0) {
                 // If  the user doesn't have a main vehicle, set the states based on the first vehicle in the vehicles array.
                 setVin(userData.vehicles[0].vehicleVIN);
@@ -96,6 +109,7 @@ const AccountInfo = () => {
                 setMake(userData.vehicles[0].vehicleMake);
                 setModel(userData.vehicles[0].vehicleModel);
                 setYear(userData.vehicles[0].vehicleYear);
+                handleNav(make, model, year);
             }
         }
         //The second argument in this useEffect is an array of dependencies, but since this code doesn't have any dependencies, it is an empty array.
@@ -149,6 +163,7 @@ const AccountInfo = () => {
                     // Log any errors that occur while fetching user data
                     console.error('Error fetching image:', error);
                 }
+                handleNav(make, model, year);
             }
         };
         // Call the getImg function with the user object as an argument.
@@ -199,9 +214,8 @@ const AccountInfo = () => {
             }
             // Grab the response in JSON format then set a success message to be displayed.
             const data = await response.json();
-            setSuccessful('Successfully added a vehicle. You may need to refresh the page.')
-            // Update vehicles array with the new vehicle
-            setVehicles([...vehicles, {
+            vehicles[currentIndex].mainVehicle = false;
+            await setVehicles([...vehicles, {
                 mainVehicle: data.mainVehicle,
                 vehicleVIN: data.vehicleVIN,
                 vehicleMake: data.vehicleMake,
@@ -209,13 +223,16 @@ const AccountInfo = () => {
                 vehicleYear: data.vehicleYear,
                 vehicleImgUrl: data.vehicleImgUrl
             }]);
+            setSuccessful(true)
             //Catch an error and then set an error message to be displayed.
         } catch (error) {
             console.error(error)
             setAddError(error.message)
         }
     }
-
+    useEffect(() => {
+        console.log(vehicles);
+    }, [vehicles]);
     /**************************************************************************\
         Desc.:  This function fetches vehicle information from the server.
                 Then calls the addUserVehicle function with the returned data.
@@ -239,7 +256,6 @@ const AccountInfo = () => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
         //  Fetch the vehicle information.
-        //  This function will also call the addUserVehicle function.
         await fetchVehicleInfo(user.username, newVin);
         //  Close the form to add a vehicle.
         setAdd(false)
@@ -262,6 +278,7 @@ const AccountInfo = () => {
     const handleClickNext = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
+        setSuccessful(false);
         // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
         const newIndex = currentIndex === vehicles.length - 1 ? 0 : currentIndex + 1;
         // Set the current index to the new index.
@@ -285,6 +302,7 @@ const AccountInfo = () => {
             // If an error occurs, log the error to the console.
             .catch((error) => console.log(error));
         setSwitchAlert(true);
+        handleNav(make, model, year);
     };
 
 
@@ -295,6 +313,7 @@ const AccountInfo = () => {
     const handleClickPrev = async (event) => {
         // Prevents the default behavior of the event, which is to refresh the page when the button is clicked.
         event.preventDefault();
+        setSuccessful(false);
         // Calculate the index of the next vehicle in the array, OR reset to the first vehicle if at the end of the array.
         const newIndex = currentIndex === 0 ? vehicles.length - 1 : currentIndex - 1
         // Set the current index to the new index.
@@ -318,6 +337,7 @@ const AccountInfo = () => {
             // If an error occurs, log the error to the console.
             .catch((error) => console.log(error));
         setSwitchAlert(true);
+        handleNav(make, model, year);
     };
 
     const closeAlert = () => {
@@ -379,6 +399,7 @@ const AccountInfo = () => {
 
     return (
         <div>
+            <NavigationBar make={make} model={model} year={year} />
             <div className="index_body">
                 <section className="section0" style={{ textAlign: "center" }}>
                     <div className="box-main">
@@ -397,7 +418,9 @@ const AccountInfo = () => {
                                     <div style={{ display: "inline-block" }}>
                                         <Row>
                                             <Button style={{ width: "auto", height: "auto", margin: "10px", }} variant="primary" type="add" onClick={handleClickAdd}>{"Add Vehicle"}</Button>
-                                            <Button style={{ width: "auto", height: "auto", margin: "10px", backgroundColor: "red", borderColor: "red" }} color="red" variant="primary" type="delete" onClick={handleClickDelete}>{"Remove Vehicle"}</Button>
+                                            {vehicles.length > 1 && (
+                                                <Button style={{ width: "auto", height: "auto", margin: "10px", backgroundColor: "red", borderColor: "red" }} color="red" variant="primary" type="delete" onClick={handleClickDelete}>{"Remove Vehicle"}</Button>
+                                            )}
                                         </Row>
                                         {add && (
                                             <Container>
@@ -428,7 +451,7 @@ const AccountInfo = () => {
                             <Row style={{ display: "flow-root" }}>
                                 <Col>
                                     {addError && <Alert variant="danger">{addError}</Alert>}
-                                    {successful && <Alert variant='success'>{successful}</Alert>}
+                                    {successful && <Alert variant='success'>Successfully added a vehicle. You may need to refresh the page.</Alert>}
                                 </Col>
                             </Row>
                         </div>

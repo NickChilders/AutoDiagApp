@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Button, Container, ListGroup, ListGroupItem, Row, Col, Form, Alert } from "react-bootstrap";
 import { UserContext } from "./userContext";
+import NavigationBar from "./NavigationBar";
 
 const Maintenance = () => {
   const { user } = useContext(UserContext);
@@ -233,9 +234,10 @@ const Maintenance = () => {
     if (!user) {
       return (
         <div>
+          <NavigationBar />
           <div className="index_body">
             <section className="section" >
-              <div className="box-main" >
+              <div className="box-main" style={{marginTop: "20px"}}>
                 <div className="firstHalf">
                   <h1 className="text-big">
                     Maintenance &emsp;
@@ -264,9 +266,10 @@ const Maintenance = () => {
     else {
       return (
         <div>
+          <NavigationBar make={make} model={model} year={year} />
           <div className="index_body">
             <section className="section0" style={{textAlign: "center"}}>
-              <div className="box-main">
+              <div className="box-main" style={{marginTop: "20px"}}>
                 <div className="firstHalf">
                   <h1 className="text-big">
                     Maintenance &emsp;
@@ -299,10 +302,17 @@ const Maintenance = () => {
                 </div>
               </Container>
             )}
+            <hr />
             <section className="section1" style={{textAlign: "center"}}>
+              <div className="box-main">
+                <p>Contribute to the community!
+                  <br/>
+                  Add a maintenance procedure for other users to follow.
+                </p>
               <Button as={Link} to={`${process.env.PUBLIC_URL}/api/maintenance/job/new`} variant="primary" style={{ margin: "20px", height: "auto", width: "auto" }}>
-                {"Add Procedure"}
+                {"Add Your Procedure"}
               </Button>
+              </div>
             </section>
             {returned && (
               <section className="section2" style={{textAlign: "center"}}>

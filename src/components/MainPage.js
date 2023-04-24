@@ -3,8 +3,10 @@ import { Link, NavLink } from 'react-router-dom';
 import cel from "../images/CEL.png";
 import maint from "../images/Maint.png";
 import forums from "../images/Forums.png";
+import logo from "../images/ADLOGO.png";
 import { UserContext } from './userContext';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import NavigationBar from './NavigationBar';
 
 const MainPage = () => {
     const { user } = useContext(UserContext);
@@ -157,6 +159,12 @@ const MainPage = () => {
         if (!user) {
             return (
                 [
+                    <NavigationBar />,
+                    <section className='section 0' style={{ backgroundColor: "black", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <div className='box-main'>
+                            <h1 style={{ color: "#F6AD15" }}><u>AUTO</u>  <img src={logo} style={{ width: "25%", height: "auto", verticalAlign: "middle" }} />  <u>DIAG</u></h1>
+                        </div>
+                    </section>,
                     <section className="section1" key="section0" style={{ textAlign: "center" }}>
                         <div className="box-main">
                             <div className="firstHalf"></div>
@@ -172,7 +180,7 @@ const MainPage = () => {
                         </div>
                         <div className="box-main">
                             <div className="secondHalf">
-                                <h1 className="text-big" id="program" style={{ marginTop: "100px" }}>My Car</h1>
+                                <h2 className="text-big" id="program" style={{ marginTop: "100px" }}>My Car</h2>
                                 <div></div>
                                 <p className="text-small">
                                     Track everything for your car. Year, Make, Model, Miles, MPG, etc.<br />
@@ -188,10 +196,20 @@ const MainPage = () => {
         else {
             return (
                 [
+                <NavigationBar make={make} model={model} year={year} />,
+                <div>
+                    <section className='section 0' style={{ backgroundColor: "black", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <div className='box-main'>
+                            <h1 style={{ color: "#F6AD15" }}><u>AUTO</u>  <img src={logo} style={{ width: "25%", height: "auto", verticalAlign: "middle" }} />  <u>DIAG</u></h1>
+                        </div>
+                            <h6 style={{ color: "#F6AD15" }}><u>Welcome back {` ${user.username}`}!</u></h6>
+                    </section>,
                     <section className="section1" key="section1" style={{ textAlign: "center" }}>
                         <div className="box-main">
                             <div className="firstHalf">
-                                <h1 className="text-big" >Welcome to AutoDiag {` ${user.username}`}!</h1>
+                                <p></p>
+                                <br />
+                                <h2 className="text-big" ><u>Diagnostics</u></h2>
                                 <p className="text-small">Diagnose your car with confidence.</p>
                                 <Link to={`${process.env.PUBLIC_URL}/diagnostics`}><img src={cel} width="auto" height="90" alt="diagnostics link" /></Link>
                             </div>
@@ -199,7 +217,7 @@ const MainPage = () => {
                         <hr />
                         <div className="box-main">
                             <div className="secondHalf">
-                                <h1 className="text-big" id="program">Maintenance</h1>
+                                <h2 className="text-big" id="program"><u>Maintenance</u></h2>
                                 <p className="text-small">No need to worry about finding the correct information. All necessary maintenance for YOUR car.</p>
                                 <Link to={`${process.env.PUBLIC_URL}/maintenance`}><img src={maint} width="auto" height="125" alt="maintenance link" /></Link>
                             </div>
@@ -207,7 +225,7 @@ const MainPage = () => {
                         <hr />
                         <div className="box-main">
                             <div className="secondHalf">
-                                <h1 className="text-big" id="program">Message Board</h1>
+                                <h2 className="text-big" id="program"><u>Forums</u></h2>
                                 <p className="text-small">Browse the forums for everything related to YOUR car's year, make, and model.</p>
                                 <Link to={`${process.env.PUBLIC_URL}/forums`}><img src={forums} width="auto" height="200" alt="forums link" /></Link>
                             </div>
@@ -215,8 +233,8 @@ const MainPage = () => {
                         <hr />
                         <div className="box-main">
                             <div className="secondHalf">
-                                <h1 className="text-big" id="program">My Car:</h1>
-                                <ListGroup style={{textAlign: "left"}}>
+                                <h2 className="text-big" id="program"><u>My Car</u>:</h2>
+                                <ListGroup style={{ textAlign: "left" }}>
                                     <ListGroupItem><b>Make:</b> {make}</ListGroupItem>
                                     <ListGroupItem><b>Model:</b> {model}</ListGroupItem>
                                     <ListGroupItem><b>Series:</b> {year}</ListGroupItem>
@@ -225,6 +243,7 @@ const MainPage = () => {
                         </div>
                         <hr />
                     </section>
+                    </div>
                 ]
             )
         }

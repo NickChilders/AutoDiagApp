@@ -1,15 +1,16 @@
 import { Nav, Navbar, NavbarBrand, NavLink } from "react-bootstrap";
 import { BsClipboard2Check, BsWrench } from "react-icons/bs";
-import { MdManageAccounts, MdOutlineLogin, MdOutlineLogout, MdOutlineHome, MdOutlineForum } from "react-icons/md";
-import React, { useContext } from 'react';
+import { MdManageAccounts, MdOutlineLogin, MdOutlineLogout, MdOutlineHome, MdOutlineForum, MdMenu } from "react-icons/md";
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import logo from "./../images/ADLOGO.png"
 import { UserContext } from "./userContext";
 
-const NavigationBar = () => {
+const NavigationBar = (props) => {
     const { user, setUser } = useContext(UserContext)
+
     return (
-        <Navbar collapseOnSelect expand="ms" bg="dark" variant="dark" style={{ padding: "15px" }}>
+        <Navbar collapseOnSelect expand="ms" bg="dark" variant="dark" style={{ padding: "15px", marginTop:"-50px", display:"flex" }}>
 
             <Navbar.Toggle aria-controls='navbarScroll' data-bs-target="#navbarScroll">
                 <div className="navbar-item">
@@ -17,12 +18,12 @@ const NavigationBar = () => {
                         user ? (
                             <div style={{ color: "var(--bs-nav-link-color)", fontSize: 28 }}>
                                 <img src={logo} width="auto" height="50" alt="random logo" />
-                                    &emsp; AutoDiag
+                                    &emsp; <MdMenu />
                             </div>
                         ) : (
                             <div style={{ color: "var(--bs-nav-link-color)", fontSize: 28 }}>
                                 <img src={logo} width="auto" height="50" alt="random logo" />
-                                    &emsp;AutoDiag
+                                    &emsp; <MdMenu />
                             </div>
                         )
                     }
@@ -32,7 +33,7 @@ const NavigationBar = () => {
                 {
                     user ? (
                         <div className="navbar-item" style={{fontSize:20, color: "rgb(255 255 255 / 55%)"}}>
-                            {user.username}
+                            {props.make} {props.model} {props.year}
                             <div style={{fontSize:12}}>
                             </div>
                         </div>

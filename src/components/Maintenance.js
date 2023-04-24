@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Button, Container, ListGroup, ListGroupItem, Row, Col, Form, Alert } from "react-bootstrap";
+import { Button, Container, ListGroup, ListGroupItem, Row, Col, Form, Alert, Table } from "react-bootstrap";
 import { UserContext } from "./userContext";
 import NavigationBar from "./NavigationBar";
 
@@ -237,7 +237,7 @@ const Maintenance = () => {
           <NavigationBar />
           <div className="index_body">
             <section className="section" >
-              <div className="box-main" style={{marginTop: "20px"}}>
+              <div className="box-main" style={{ marginTop: "20px" }}>
                 <div className="firstHalf">
                   <h1 className="text-big">
                     Maintenance &emsp;
@@ -268,8 +268,8 @@ const Maintenance = () => {
         <div>
           <NavigationBar make={make} model={model} year={year} />
           <div className="index_body">
-            <section className="section0" style={{textAlign: "center"}}>
-              <div className="box-main" style={{marginTop: "20px"}}>
+            <section className="section0" style={{ textAlign: "center" }}>
+              <div className="box-main" style={{ marginTop: "20px" }}>
                 <div className="firstHalf">
                   <h1 className="text-big">
                     Maintenance &emsp;
@@ -303,58 +303,102 @@ const Maintenance = () => {
               </Container>
             )}
             <hr />
-            <section className="section1" style={{textAlign: "center"}}>
+            <section className="section1" style={{ textAlign: "center" }}>
               <div className="box-main">
                 <p>Contribute to the community!
-                  <br/>
+                  <br />
                   Add a maintenance procedure for other users to follow.
                 </p>
-              <Button as={Link} to={`${process.env.PUBLIC_URL}/api/maintenance/job/new`} variant="primary" style={{ margin: "20px", height: "auto", width: "auto" }}>
-                {"Add Your Procedure"}
-              </Button>
+                <Button as={Link} to={`${process.env.PUBLIC_URL}/api/maintenance/job/new`} variant="primary" style={{ margin: "20px", height: "auto", width: "auto" }}>
+                  {"Add Your Procedure"}
+                </Button>
               </div>
             </section>
             {returned && (
-              <section className="section2" style={{textAlign: "center"}}>
+              <section className="section2" style={{ textAlign: "center" }}>
+                <hr />
+                <div className="box-main">
+                <h3>Here is a comprehensive list of what your vehicle may be scheduled for within +/-10,000 miles of subitted mileage:<hr /></h3>
+                <br /><br />
+                </div>
+
                 <Container>
-                  <div className="box-main">
-                    <Form style={{ margin: "20px" }}>
-                      <Form.Label>Here is what your vehicle is scheduled for within +/-10,000 miles of subitted mileage:</Form.Label>
-                      {scheduleData && scheduleData.map((item, index) => (
-                        <div key={index}>
-                          <Row><Col>
-                            <h2>{item.desc}</h2>
-                            <p>Due mileage: {item.due_mileage}</p>
-                            <p>Due km: {item.due_km}</p>
-                            <p>Is OEM: {item.is_oem ? 'Yes' : 'No'}</p>
-                            <p>Repair difficulty: {item.repair.repair_difficulty}</p>
-                            <p>Labor hours: {item.repair.repair_hours}</p>
-                            <p>Labor rate per hour: {item.repair.labor_rate_per_hour}</p>
-                            <p>Part cost: {item.repair.part_cost}</p>
-                            <p>Labor cost: {item.repair.labor_cost}</p>
-                            <p>Misc cost: {item.repair.misc_cost}</p>
-                            <p>Total cost: {item.repair.total_cost}</p>
-                            <ListGroup>
-                              {item.parts && item.parts.map((part, i) => (
-                                <ListGroupItem key={i}>
-                                  <p>Part description: {part.desc}</p>
-                                  <p>Manufacturer: {part.manufacturer}</p>
-                                  <p>Price: {part.price}</p>
-                                  <p>Quantity: {part.qty}</p>
-                                </ListGroupItem>
-                              ))}
-                            </ListGroup>
-                            <hr />
-                          </Col></Row>
-                        </div>
-                      ))}
-                      <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="close" onClick={handleClose}>{"Close"}</Button>
-                    </Form>
+                <p style={{fontSize:"small", fontWeight:"normal", textAlign:"left"}}>
+                  "Repair Difficulty" is the difficulty rating of a specific maintenance item.<br />
+                  &emsp;&emsp;0-1: Most people can do on their own without significant training.<br />
+                  &emsp;&emsp;2: Require some degree of skill.<br />
+                  &emsp;&emsp;3: Require significant skill and/or experience and is not recommended for casual users.</p>
+                  <div>
+                    <Table responsive>
+                      <thead>
+                        <tr style={{ backgroundColor: "blue", color: "white" }}>
+                          <th>Due Mileage</th>
+                          <th>Repair Difficulty</th>
+                          <th>Labor Hours</th>
+                          <th>Labor Rate per Hour</th>
+                          <th>Labor Cost</th>
+                          <th>Part Cost</th>
+                          <th>Misc Cost</th>
+                          <th>Total Cost</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {scheduleData && scheduleData.map((item, index) => (
+                          <React.Fragment key={index}>
+                            <tr>
+                              <td colSpan={8}><u>Description: {item.desc}</u></td>
+                            </tr>
+                            <tr>
+                              <td>{item.due_mileage}</td>
+                              <td>{item.repair.repair_difficulty}</td>
+                              <td>{item.repair.repair_hours}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-"):(`$${item.repair.labor_rate_per_hour}/hour`)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-"):(`$${item.repair.labor_cost}`)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-"):(`$${item.repair.part_cost}`)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-"):(`$${item.repair.misc_cost}`)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-"):(<u>${item.repair.total_cost}</u>)}</td>
+                            </tr>
+                            {item.parts && (
+                              <React.Fragment>
+                                <tr style={{ backgroundColor: "#fabd5a" }}>
+                                  <th>Part Description</th>
+                                  <th>Manufacturer</th>
+                                  <th>Part Price</th>
+                                  <th>Quantity Needed</th>
+                                </tr>
+                                {item.parts && item.parts.map((part, i) => (
+                                  <React.Fragment key={i}>
+                                    <tr>
+                                      <td>{part.desc}</td>
+                                      <td>{part.manufacturer}</td>
+                                      <td>{part.price}</td>
+                                      <td>{part.qty}</td>
+                                    </tr>
+                                  </React.Fragment>
+                                ))}
+                              </React.Fragment>
+                            )}
+                            <tr style={{ backgroundColor: "blue" }}>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                          </React.Fragment>
+                        ))}
+                      </tbody>
+                    </Table>
+                    <p style={{fontSize:"small"}}>Note: The prices shown are averages and may vary depending on location.</p>
+                    <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="close" onClick={handleClose}>{"Close"}</Button>
                   </div>
                 </Container>
               </section>
             )}
-            <section className="section3" style={{textAlign: "center"}}>
+            <section className="section3" style={{ textAlign: "center" }}>
               {!noJobs ? (
                 <div>
                   <ListGroup>

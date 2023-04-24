@@ -214,6 +214,7 @@ const Forums = () => {
       setTitle('');
       setContent('');
     }
+    setShowForm(false);
   };
 
   const handleSearch = async (event) => {

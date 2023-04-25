@@ -315,54 +315,51 @@ const Maintenance = () => {
               </div>
             </section>
             {returned && (
-              <section className="section2" style={{ textAlign: "center" }}>
+              <section className="section2" style={{ textAlign: "center", }}>
                 <hr />
-                <div className="box-main">
-                <h3>Here is a comprehensive list of what your vehicle may be scheduled for within +/-10,000 miles of subitted mileage:<hr /></h3>
-                <br /><br />
-                </div>
-
                 <Container>
-                <p style={{fontSize:"small", fontWeight:"normal", textAlign:"left"}}>
-                  "Repair Difficulty" is the difficulty rating of a specific maintenance item.<br />
-                  &emsp;&emsp;0-1: Most people can do on their own without significant training.<br />
-                  &emsp;&emsp;2: Require some degree of skill.<br />
-                  &emsp;&emsp;3: Require significant skill and/or experience and is not recommended for casual users.</p>
+                  <p style={{ fontSize: "small", fontWeight: "normal", textAlign: "left" }}>
+                    "Repair Difficulty" is the difficulty rating of a specific maintenance item.<br />
+                    &emsp;&emsp;0-1: Most people can do on their own without significant training.<br />
+                    &emsp;&emsp;2: Require some degree of skill.<br />
+                    &emsp;&emsp;3: Require significant skill and/or experience and is not recommended for casual users.</p>
                   <div>
-                    <Table responsive>
+                    <Table responsive style={{ borderRadius: '20px', overflow: 'hidden' }}>
                       <thead>
                         <tr style={{ backgroundColor: "blue", color: "white" }}>
-                          <th>Due Mileage</th>
-                          <th>Repair Difficulty</th>
-                          <th>Labor Hours</th>
-                          <th>Labor Rate per Hour</th>
-                          <th>Labor Cost</th>
-                          <th>Part Cost</th>
-                          <th>Misc Cost</th>
-                          <th>Total Cost</th>
+                          <th colSpan={8}>Here is a comprehensive list of what your vehicle may be scheduled for within +/-10,000 miles of subitted mileage:</th>
                         </tr>
                       </thead>
                       <tbody>
                         {scheduleData && scheduleData.map((item, index) => (
                           <React.Fragment key={index}>
-                            <tr>
-                              <td colSpan={8}><u>Description: {item.desc}</u></td>
+                            <tr style={{ backgroundColor: "blue", color: "white" }}>
+                              <th colSpan={8}><u>Description: {item.desc}</u></th>
+                            </tr>
+                            <tr style={{ backgroundColor: "blue", color: "white" }}>
+                              <th>Due Mileage</th>
+                              <th>Repair Difficulty</th>
+                              <th>Labor Hours</th>
+                              <th>Labor Rate per Hour</th>
+                              <th>Labor Cost</th>
+                              <th>Part Cost</th>
+                              <th>Misc Cost</th>
+                              <th>Total Cost</th>
                             </tr>
                             <tr>
                               <td>{item.due_mileage}</td>
                               <td>{item.repair.repair_difficulty}</td>
                               <td>{item.repair.repair_hours}</td>
-                              <td>{item.repair.total_cost === 0 ? ("-"):(`$${item.repair.labor_rate_per_hour}/hour`)}</td>
-                              <td>{item.repair.total_cost === 0 ? ("-"):(`$${item.repair.labor_cost}`)}</td>
-                              <td>{item.repair.total_cost === 0 ? ("-"):(`$${item.repair.part_cost}`)}</td>
-                              <td>{item.repair.total_cost === 0 ? ("-"):(`$${item.repair.misc_cost}`)}</td>
-                              <td>{item.repair.total_cost === 0 ? ("-"):(<u>${item.repair.total_cost}</u>)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-") : (`$${item.repair.labor_rate_per_hour}/hour`)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-") : (`$${item.repair.labor_cost}`)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-") : (`$${item.repair.part_cost}`)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-") : (`$${item.repair.misc_cost}`)}</td>
+                              <td>{item.repair.total_cost === 0 ? ("-") : (<u>${item.repair.total_cost}</u>)}</td>
                             </tr>
                             {item.parts && (
                               <React.Fragment>
                                 <tr style={{ backgroundColor: "#fabd5a" }}>
                                   <th>Part Description</th>
-                                  <th>Manufacturer</th>
                                   <th>Part Price</th>
                                   <th>Quantity Needed</th>
                                 </tr>
@@ -370,7 +367,6 @@ const Maintenance = () => {
                                   <React.Fragment key={i}>
                                     <tr>
                                       <td>{part.desc}</td>
-                                      <td>{part.manufacturer}</td>
                                       <td>{part.price}</td>
                                       <td>{part.qty}</td>
                                     </tr>
@@ -378,21 +374,15 @@ const Maintenance = () => {
                                 ))}
                               </React.Fragment>
                             )}
-                            <tr style={{ backgroundColor: "blue" }}>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                            </tr>
                           </React.Fragment>
                         ))}
                       </tbody>
+                      <thead>
+                        <tr style={{ backgroundColor: "blue", color: "white" }}>
+                          <th style={{ fontSize: "small" }} colSpan={8}>Note: The prices shown are averages and may vary depending on location.</th>
+                        </tr>
+                      </thead>
                     </Table>
-                    <p style={{fontSize:"small"}}>Note: The prices shown are averages and may vary depending on location.</p>
                     <Button style={{ width: "auto", height: "auto", margin: "20px" }} variant="primary" type="close" onClick={handleClose}>{"Close"}</Button>
                   </div>
                 </Container>

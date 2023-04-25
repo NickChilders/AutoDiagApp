@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { UserContext } from './userContext';
 import { MdArrowForward, MdArrowBack, MdClose } from "react-icons/md";
-import { Row, Col, Button, Container, Form, Alert, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Row, Col, Button, Container, Form, Alert, ListGroup, ListGroupItem, CloseButton } from 'react-bootstrap';
 import NavigationBar from './NavigationBar';
 
 const AccountInfo = ({ onNavChange }) => {
@@ -227,7 +227,7 @@ const AccountInfo = ({ onNavChange }) => {
                 vehicleYear: data.vehicleYear,
                 vehicleImgUrl: data.vehicleImgUrl
             }]);
-            setCurrentIndex(vehicles.length-1);
+            setCurrentIndex(vehicles.length - 1);
             setSuccessful(true)
             //Catch an error and then set an error message to be displayed.
         } catch (error) {
@@ -350,7 +350,14 @@ const AccountInfo = ({ onNavChange }) => {
     };
 
     const closeAlert = () => {
-        setSwitchAlert(false);
+        if (switchAlert)
+            setSwitchAlert(false);
+        else if (addError)
+            setAddError(false);
+        else if (successful)
+            setSuccessful(false);
+        else if (deleteSuccessful)
+            setDeleteSuccessful(false);
     }
 
     /**********************************************************************************\
@@ -462,9 +469,30 @@ const AccountInfo = ({ onNavChange }) => {
                             </Row>
                             <Row style={{ display: "flow-root" }}>
                                 <Col>
-                                    {addError && <Alert variant="danger">{addError}</Alert>}
-                                    {successful && <Alert variant='success'>Successfully added a vehicle. You may need to refresh the page.</Alert>}
-                                    {deleteSuccessful && <Alert variant='success'>Successfully removed vehicle. You may need to refresh the page.</Alert>}
+                                    {addError && (
+                                        <div className='box-main'>
+                                            <Alert variant="danger">
+                                                <p style={{textAlign:"right"}}>{" "}<CloseButton onClick={closeAlert} />{" "}</p>
+                                                {addError}
+                                            </Alert>
+                                        </div>
+                                    )}
+                                    {successful && (
+                                        <div className='box-main'>
+                                            <Alert variant='success'>
+                                                <p style={{textAlign:"right"}}>{" "}<CloseButton onClick={closeAlert} />{" "}</p>
+                                                Successfully added a vehicle. You may need to refresh the page.
+                                            </Alert>
+                                        </div>
+                                    )}
+                                    {deleteSuccessful && (
+                                        <div className='box-main'>
+                                            <Alert variant='success'>
+                                                <p style={{textAlign:"right"}}>{" "}<CloseButton onClick={closeAlert} />{" "}</p>
+                                                Successfully removed vehicle. You may need to refresh the page.
+                                            </Alert>
+                                        </div>
+                                    )}
                                 </Col>
                             </Row>
                         </div>
@@ -477,13 +505,12 @@ const AccountInfo = ({ onNavChange }) => {
                 </section>
                 {switchAlert &&
                     (
-                        <Alert className="alert alert-success alert-dismissable" data-dismiss="alert" aria-label="close">
-                            <p style={{ textAlign: "end" }}><u onClick={closeAlert}>Close{" "}<MdClose onClick={closeAlert} />{" "}</u></p>
-                            <p style={{ textAlign: "center" }}>
-                                <u>Your main vehicle has been switched to your {make} {model}.</u>
-                            </p>
-                            <div style={{ marginLeft: "auto" }}></div>
-                        </Alert>
+                        <div className='box-main'>
+                            <Alert className="alert alert-success alert-dismissable" data-dismiss="alert" aria-label="close">
+                                <p style={{ textAlign: "right" }}>{" "}<CloseButton onClick={closeAlert} />{" "}</p>
+                                Your main vehicle has been switched to your <u>{make} {model}.</u>
+                            </Alert>
+                        </div>
                     )
                 }
 

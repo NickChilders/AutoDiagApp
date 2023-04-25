@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { Button, Container, ListGroup, ListGroupItem, Row, Col, Form, Alert, Table } from "react-bootstrap";
 import { UserContext } from "./userContext";
 import NavigationBar from "./NavigationBar";
+import { MdStarOutline, MdStarRate } from "react-icons/md";
 
 const Maintenance = () => {
   const { user } = useContext(UserContext);
@@ -230,6 +231,21 @@ const Maintenance = () => {
     setReturned(false);
   }
 
+  const getStars = (avg) => {
+    if(avg === 5)
+      return (<><MdStarRate /><MdStarRate /><MdStarRate /><MdStarRate /><MdStarRate /></>)
+    else if(avg === 4)
+      return (<><MdStarRate /><MdStarRate /><MdStarRate /><MdStarRate /><MdStarOutline /></>)
+    else if(avg === 3)
+      return (<><MdStarRate /><MdStarRate /><MdStarRate /><MdStarOutline /><MdStarOutline /></>)
+    else if(avg === 2)
+      return (<><MdStarRate /><MdStarRate /><MdStarOutline /><MdStarOutline /><MdStarOutline /></>)
+    else if(avg === 1)
+      return (<><MdStarRate /><MdStarOutline /><MdStarOutline /><MdStarOutline /><MdStarOutline /></>)
+    else if(avg === 0)
+    return (<><MdStarOutline /><MdStarOutline /><MdStarOutline /><MdStarOutline /><MdStarOutline /></>)
+  }
+
   const checkSignIn = ({ user }) => {
     if (!user) {
       return (
@@ -400,6 +416,12 @@ const Maintenance = () => {
                         </Link>
                         <p style={{ fontSize: 12 }}>Posted by: {job.author}</p>
                         <p style={{ fontSize: 11, marginTop: -20 }}>Date: {job.date}</p>
+                        <div className="box-main">
+                          Useful: &emsp;&emsp;{getStars(job.ratings.usefulness.average)}
+                        </div>
+                        <div className="box-main">
+                          Difficulty: &emsp;{getStars(job.ratings.difficulty.average)}
+                        </div>
                       </ListGroupItem>
                     ))}
                     <hr />

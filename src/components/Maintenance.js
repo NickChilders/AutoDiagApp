@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Button, Container, ListGroup, ListGroupItem, Row, Col, Form, Alert, Table } from "react-bootstrap";
+import moment from 'moment';
+import { Button, Container, Row, Col, Form, Alert, Table } from "react-bootstrap";
 import { UserContext } from "./userContext";
 import NavigationBar from "./NavigationBar";
 import { MdStarOutline, MdStarRate } from "react-icons/md";
@@ -21,6 +22,8 @@ const Maintenance = () => {
   const [milesError, setMilesError] = useState('');
   const [scheduleData, setScheduleData] = useState([]);
   const [returned, setReturned] = useState(false);
+  const [singleFilter, setSingleFilter] = useState(false);
+  const [doubleFilter, setDoubleFilter] = useState(false);
 
   /********************************************************************\  
         Desc.:  Fetch data from the specified URL and update the state
@@ -232,19 +235,52 @@ const Maintenance = () => {
   }
 
   const getStars = (avg) => {
-    if(avg === 5)
+    if (avg === 5)
       return (<><MdStarRate /><MdStarRate /><MdStarRate /><MdStarRate /><MdStarRate /></>)
-    else if(avg === 4)
+    else if (avg === 4)
       return (<><MdStarRate /><MdStarRate /><MdStarRate /><MdStarRate /><MdStarOutline /></>)
-    else if(avg === 3)
+    else if (avg === 3)
       return (<><MdStarRate /><MdStarRate /><MdStarRate /><MdStarOutline /><MdStarOutline /></>)
-    else if(avg === 2)
+    else if (avg === 2)
       return (<><MdStarRate /><MdStarRate /><MdStarOutline /><MdStarOutline /><MdStarOutline /></>)
-    else if(avg === 1)
+    else if (avg === 1)
       return (<><MdStarRate /><MdStarOutline /><MdStarOutline /><MdStarOutline /><MdStarOutline /></>)
-    else if(avg === 0)
-    return (<><MdStarOutline /><MdStarOutline /><MdStarOutline /><MdStarOutline /><MdStarOutline /></>)
+    else if (avg === 0)
+      return (<><MdStarOutline /><MdStarOutline /><MdStarOutline /><MdStarOutline /><MdStarOutline /></>)
   }
+
+
+  const handleCheckboxChange = (event, jobs) => {
+    const defaultJobs = [...jobs];
+    const isUsefulChecked = document.getElementById("usefulnessCheckbox").checked;
+    const isDifficultyChecked = document.getElementById("difficultyCheckbox").checked;
+    if (isUsefulChecked && isDifficultyChecked) {
+      // both checkboxes are checked
+      setDoubleFilter(true);
+      setSingleFilter(false);
+      setJobs(jobs.sort((a, b) => {
+        const usefulDiff = b.ratings.usefulness.average - a.ratings.usefulness.average;
+        const diffDiff = a.ratings.difficulty.average - b.ratings.difficulty.average;
+        return usefulDiff !== 0 ? usefulDiff : diffDiff;
+      }));
+    } else if (isUsefulChecked) {
+      // only usefulness checkbox is checked
+      setDoubleFilter(false);
+      setSingleFilter(true);
+      setJobs(jobs.sort((a, b) => b.ratings.usefulness.average - a.ratings.usefulness.average));
+    } else if (isDifficultyChecked){
+      // only difficulty checkbox is checked
+      setDoubleFilter(false);
+      setSingleFilter(true);
+      setJobs(jobs.sort((a, b) => a.ratings.difficulty.average - b.ratings.difficulty.average));
+    } else {
+      // neither checkbox is checked
+      setDoubleFilter(false);
+      setSingleFilter(false)
+      setJobs(defaultJobs.sort((a, b) => new Date(b.date) - new Date(a.date)));
+    }
+  }
+  
 
   const checkSignIn = ({ user }) => {
     if (!user) {
@@ -406,26 +442,52 @@ const Maintenance = () => {
             )}
             <section className="section3" style={{ textAlign: "center" }}>
               {!noJobs ? (
-                <div>
-                  <ListGroup>
-                    <hr />
-                    {jobs.map((job, index) => (
-                      <ListGroupItem key={index}>
-                        <Link to={`${process.env.PUBLIC_URL}/api/maintenance/job/${job._id}`}>
-                          <h4>{job.heading}</h4>
-                        </Link>
-                        <p style={{ fontSize: 12 }}>Posted by: {job.author}</p>
-                        <p style={{ fontSize: 11, marginTop: -20 }}>Date: {job.date}</p>
-                        <div className="box-main">
-                          Useful: &emsp;&emsp;{getStars(job.ratings.usefulness.average)}
-                        </div>
-                        <div className="box-main">
-                          Difficulty: &emsp;{getStars(job.ratings.difficulty.average)}
-                        </div>
-                      </ListGroupItem>
-                    ))}
-                    <hr />
-                  </ListGroup>
+                <div className="box-main">
+                  <Table className="post-table" striped style={{ whiteSpace: 'nowrap' }} responsive>
+                    <thead>
+                      <tr style={{ backgroundColor: "blue", color: "white" }}>
+                        <th colSpan={5}>
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <span>Maintenance Jobs Users Have Posted</span>
+                            <div style={{ marginLeft: "auto", textAlign: 'left' }}>
+                              <div>
+                                <label>
+                                  <input type="checkbox" id="usefulnessCheckbox" value="usefulness" onChange={(e) => handleCheckboxChange(e,jobs)} />Highest Usefulness
+                                </label>
+                              </div>
+                              <div>
+                                <label>
+                                  <input type="checkbox" id="difficultyCheckbox" value="difficulty" onChange={(e) => handleCheckboxChange(e,jobs)} />Lowest Difficulty
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
+                    <tr style={{ backgroundColor: "blue", color: "white" }}>
+                      <th>Title</th>
+                      <th>Author</th>
+                      <th>Date Posted</th>
+                      <th>Usefulness Rating</th>
+                      <th>Difficulty Rating</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      {jobs.map((job, index) => (
+                        <React.Fragment key={index}>
+                          <tr>
+                            <td><Link to={`${process.env.PUBLIC_URL}/api/maintenance/job/${job._id}`}>{job.heading}</Link></td>
+                            <td>{job.author}</td>
+                            <td>{moment(job.date).format('MMM Do YYYY')}</td>
+                            <td style={{ textAlign: 'center' }}>{getStars(job.ratings.usefulness.average)}{` (${job.ratings.usefulness.count})`}</td>
+                            <td style={{ textAlign: 'center' }}>{getStars(job.ratings.difficulty.average)}{` (${job.ratings.difficulty.count})`}</td>
+                          </tr>
+                        </React.Fragment>
+                      ))}
+                    </tbody>
+                  </Table>
                 </div>
               ) : (
                 <div className="box-main">

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import cel from "../images/CEL.png";
 import maint from "../images/Maint.png";
 import forums from "../images/Forums.png";
 import logo from "../images/ADLOGO.png";
 import { UserContext } from './userContext';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap';
 import NavigationBar from './NavigationBar';
 
 const MainPage = () => {
@@ -17,6 +17,7 @@ const MainPage = () => {
     const [year, setYear] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
     const [vehicles, setVehicles] = useState([]);
+    const navigate = useNavigate();
 
     /********************************************************************\  
         Desc.:  Fetch data from the specified URL and update the state
@@ -155,6 +156,19 @@ const MainPage = () => {
         getImg(user);
     }, [user]);
 
+    const handleDiagClick = () => {
+        navigate(`${process.env.PUBLIC_URL}/diagnostics`);
+    }
+    const handleMaintClick = () => {
+        navigate(`${process.env.PUBLIC_URL}/maintenance`);
+    }
+    const handleForumClick = () => {
+        navigate(`${process.env.PUBLIC_URL}/forums`);
+    }
+    const handleAcctClick = () => {
+        navigate(`${process.env.PUBLIC_URL}/account`)
+    }
+
     const checkSignIn = ({ user }) => {
         if (!user) {
             return (
@@ -196,53 +210,61 @@ const MainPage = () => {
         else {
             return (
                 [
-                <NavigationBar make={make} model={model} year={year} />,
-                <div>
-                    <section className='section 0' style={{ backgroundColor: "black", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                        <div className='box-main'>
-                            <h1 style={{ color: "#F6AD15" }}><u>AUTO</u>  <img src={logo} style={{ width: "25%", height: "auto", verticalAlign: "middle" }} />  <u>DIAG</u></h1>
-                        </div>
+                    <NavigationBar make={make} model={model} year={year} />,
+                    <div>
+                        <section className='section 0' style={{ backgroundColor: "black", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <div className='box-main'>
+                                <h1 style={{ color: "#F6AD15" }}><u>AUTO</u>  <img src={logo} style={{ width: "25%", height: "auto", verticalAlign: "middle" }} />  <u>DIAG</u></h1>
+                            </div>
                             <h6 style={{ color: "#F6AD15" }}><u>Welcome back {` ${user.username}`}!</u></h6>
-                    </section>,
-                    <section className="section1" key="section1" style={{ textAlign: "center" }}>
-                        <div className="box-main">
-                            <div className="firstHalf">
-                                <p></p>
-                                <br />
-                                <h2 className="text-big" ><u>Diagnostics</u></h2>
-                                <p className="text-small">Diagnose your car with confidence.</p>
-                                <Link to={`${process.env.PUBLIC_URL}/diagnostics`}><img src={cel} width="auto" height="90" alt="diagnostics link" /></Link>
+                        </section>,
+                        <section className="section1" key="section1" style={{ textAlign: "center" }}>
+                            <div className="box-main">
+                                <Card bg='dark' border="primary" style={{ width: '18rem' }}>
+                                    <Card.Img variant="top" src={cel} style={{width:'280px', height:'280px'}} />
+                                    <Card.Body>
+                                        <Card.Title style={{ textAlign: 'center', color: '#F6AD15' }}>Diagnostics</Card.Title>
+                                        <Card.Text style={{ color: 'white' }}>Diagnose your car with confidence.</Card.Text>
+                                    </Card.Body>
+                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor:'white', fontWeight:'bold' }} onClick={handleDiagClick}>{"Click Here"}</Button>
+                                </Card>
                             </div>
-                        </div>
-                        <hr />
-                        <div className="box-main">
-                            <div className="secondHalf">
-                                <h2 className="text-big" id="program"><u>Maintenance</u></h2>
-                                <p className="text-small">No need to worry about finding the correct information. All necessary maintenance for YOUR car.</p>
-                                <Link to={`${process.env.PUBLIC_URL}/maintenance`}><img src={maint} width="auto" height="125" alt="maintenance link" /></Link>
+                            <hr />
+                            <div className="box-main">
+                                <Card bg='dark' border="primary" style={{ width: '18rem' }}>
+                                    <Card.Img variant="top" src={maint} style={{width:'280px', height:'280px'}} />
+                                    <Card.Body style={{ marginTop:'-50px'}}>
+                                        <Card.Title style={{ textAlign: 'center', color: '#F6AD15' }}>Maintenance</Card.Title>
+                                        <Card.Text style={{ color: 'white' }}>No need to worry about finding the correct information. All necessary maintenance for YOUR car.</Card.Text>
+                                    </Card.Body>
+                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor:'white', fontWeight:'bold' }} onClick={handleMaintClick}>{"Click Here"}</Button>
+                                </Card>
                             </div>
-                        </div>
-                        <hr />
-                        <div className="box-main">
-                            <div className="secondHalf">
-                                <h2 className="text-big" id="program"><u>Forums</u></h2>
-                                <p className="text-small">Browse the forums for everything related to YOUR car's year, make, and model.</p>
-                                <Link to={`${process.env.PUBLIC_URL}/forums`}><img src={forums} width="auto" height="200" alt="forums link" /></Link>
+                            <hr />
+                            <div className="box-main">
+                            <Card bg='dark' border="primary" style={{ width: '18rem' }}>
+                                    <Card.Img variant="top" src={forums} style={{width:'280px', height:'280px'}} />
+                                    <Card.Body style={{ marginTop:'-50px'}}>
+                                        <Card.Title style={{ textAlign: 'center', color: '#F6AD15' }}>Forums</Card.Title>
+                                        <Card.Text style={{ color: 'white' }}>Browse the forums for everything related to YOUR car's year, make, and model.</Card.Text>
+                                    </Card.Body>
+                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor:'white', fontWeight:'bold' }} onClick={handleForumClick}>{"Click Here"}</Button>
+                                </Card>
                             </div>
-                        </div>
-                        <hr />
-                        <div className="box-main">
-                            <div className="secondHalf">
-                                <h2 className="text-big" id="program"><u>My Car</u>:</h2>
-                                <ListGroup style={{ textAlign: "left" }}>
-                                    <ListGroupItem><b>Make:</b> {make}</ListGroupItem>
-                                    <ListGroupItem><b>Model:</b> {model}</ListGroupItem>
-                                    <ListGroupItem><b>Series:</b> {year}</ListGroupItem>
-                                </ListGroup>
+                            <hr />
+                            <div className="box-main">
+                                <Card bg ='primary' style={{width: '18rem'}}>
+                                    <Card.Title style={{color: 'white'}}>My Car</Card.Title>
+                                    <ListGroup variant='flush' style={{ textAlign: "left" }}>
+                                        <ListGroupItem><b>Make:</b> {make}</ListGroupItem>
+                                        <ListGroupItem><b>Model:</b> {model}</ListGroupItem>
+                                        <ListGroupItem><b>Series:</b> {year}</ListGroupItem>
+                                    </ListGroup>
+                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor:'white', fontWeight:'bold' }} onClick={handleAcctClick}>{"My Account"}</Button>
+                                </Card>
                             </div>
-                        </div>
-                        <hr />
-                    </section>
+                            <hr />
+                        </section>
                     </div>
                 ]
             )

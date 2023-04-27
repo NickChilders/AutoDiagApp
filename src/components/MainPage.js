@@ -5,7 +5,7 @@ import maint from "../images/Maint.png";
 import forums from "../images/Forums.png";
 import logo from "../images/ADLOGO.png";
 import { UserContext } from './userContext';
-import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Card, Button, Ratio, Container } from 'react-bootstrap';
 import NavigationBar from './NavigationBar';
 
 const MainPage = () => {
@@ -132,9 +132,10 @@ const MainPage = () => {
                             setModel(vehicle.vehicleModel);
                             setYear(vehicle.vehicleYear);
                         }
+                        return 1
                     }))
                     // Set the state for all the vehicles belonging to the user
-                    setVehicles(data.vehicles.map((vehicle) => {
+                    setVehicles(data.vehicles.map((vehicle, index) => {
                         return {
                             mainVehicle: vehicle.mainVehicle,
                             vehicleVIN: vehicle.vehicleVIN,
@@ -173,12 +174,12 @@ const MainPage = () => {
         if (!user) {
             return (
                 [
-                    <NavigationBar />,
-                    <section className='section 0' style={{ backgroundColor: "black", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <section className='section 0' style={{ backgroundColor: "black", display: "flex", flexDirection: "column", alignItems: "center", marginTop: '-50px', paddingLeft: '1rem', paddingRight: '1rem' }}>
                         <div className='box-main'>
-                            <h1 style={{ color: "#F6AD15" }}><u>AUTO</u>  <img src={logo} style={{ width: "25%", height: "auto", verticalAlign: "middle" }} />  <u>DIAG</u></h1>
+                            <h1 style={{ color: "#F6AD15" }}><u>AUTO</u>&emsp;<img src={logo} style={{ width: "25%", height: "auto", verticalAlign: "middle" }} alt='AutoDiag Logo' />&emsp;<u>DIAG</u></h1>
                         </div>
                     </section>,
+                    <NavigationBar />,
                     <section className="section1" key="section0" style={{ textAlign: "center" }}>
                         <div className="box-main">
                             <div className="firstHalf"></div>
@@ -210,57 +211,52 @@ const MainPage = () => {
         else {
             return (
                 [
-                    <NavigationBar make={make} model={model} year={year} />,
                     <div>
-                        <section className='section 0' style={{ backgroundColor: "black", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <section className='section 0' style={{ backgroundColor: "black", display: "flex", flexDirection: "column", alignItems: "center", marginTop: '-50px', paddingLeft: '1rem', paddingRight: '1rem' }}>
                             <div className='box-main'>
-                                <h1 style={{ color: "#F6AD15" }}><u>AUTO</u>  <img src={logo} style={{ width: "25%", height: "auto", verticalAlign: "middle" }} />  <u>DIAG</u></h1>
+                                <h1 style={{ color: "#F6AD15" }}><u>AUTO</u>&emsp;<img src={logo} style={{ width: "25%", height: "auto", verticalAlign: "middle" }} alt='AutoDiag Logo' />&emsp;<u>DIAG</u></h1>
                             </div>
                             <h6 style={{ color: "#F6AD15" }}><u>Welcome back {` ${user.username}`}!</u></h6>
                         </section>,
-                        <section className="section1" key="section1" style={{ textAlign: "center" }}>
-                            <div className="box-main">
-                                <Card bg='dark' border="primary" style={{ width: '18rem' }}>
-                                    <Card.Img variant="top" src={cel} style={{width:'280px', height:'280px'}} />
+                        <NavigationBar make={make} model={model} year={year} />,
+                        <section className="section1" key="section1">
+                            <Container className='card-container'>
+                                <Card bg='dark' border="primary" style={{ borderRadius: '1rem', borderStyle: 'ridge', borderWidth: 'thick' }}>
+                                    <Ratio aspectRatio={'1x1'}><Card.Img variant="top" src={cel} alt='Link to Diagnostics' /></Ratio>
                                     <Card.Body>
                                         <Card.Title style={{ textAlign: 'center', color: '#F6AD15' }}>Diagnostics</Card.Title>
                                         <Card.Text style={{ color: 'white' }}>Diagnose your car with confidence.</Card.Text>
                                     </Card.Body>
-                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor:'white', fontWeight:'bold' }} onClick={handleDiagClick}>{"Click Here"}</Button>
+                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor: 'white', fontWeight: 'bold' }} onClick={handleDiagClick}>{"Click Here"}</Button>
                                 </Card>
-                            </div>
-                            <hr />
-                            <div className="box-main">
-                                <Card bg='dark' border="primary" style={{ width: '18rem' }}>
-                                    <Card.Img variant="top" src={maint} style={{width:'280px', height:'280px'}} />
-                                    <Card.Body style={{ marginTop:'-50px'}}>
+                                <Card bg='dark' border="primary" style={{ borderRadius: '1rem', borderStyle: 'ridge', borderWidth: 'thick' }}>
+                                    <Ratio aspectRatio={'1x1'}><Card.Img variant="top" src={maint} alt='Link to Maintenance' /></Ratio>
+                                    <Card.Body style={{ marginTop: '-50px' }}>
                                         <Card.Title style={{ textAlign: 'center', color: '#F6AD15' }}>Maintenance</Card.Title>
                                         <Card.Text style={{ color: 'white' }}>No need to worry about finding the correct information. All necessary maintenance for YOUR car.</Card.Text>
                                     </Card.Body>
-                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor:'white', fontWeight:'bold' }} onClick={handleMaintClick}>{"Click Here"}</Button>
+                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor: 'white', fontWeight: 'bold' }} onClick={handleMaintClick}>{"Click Here"}</Button>
                                 </Card>
-                            </div>
-                            <hr />
-                            <div className="box-main">
-                            <Card bg='dark' border="primary" style={{ width: '18rem' }}>
-                                    <Card.Img variant="top" src={forums} style={{width:'280px', height:'280px'}} />
-                                    <Card.Body style={{ marginTop:'-50px'}}>
+                                <Card bg='dark' border="primary" style={{ borderRadius: '1rem', borderStyle: 'ridge', borderWidth: 'thick' }}>
+                                    <Ratio aspectRatio={'1x1'}><Card.Img variant="top" src={forums} alt='Link to Forums' /></Ratio>
+                                    <Card.Body style={{ marginTop: '-50px' }}>
                                         <Card.Title style={{ textAlign: 'center', color: '#F6AD15' }}>Forums</Card.Title>
                                         <Card.Text style={{ color: 'white' }}>Browse the forums for everything related to YOUR car's year, make, and model.</Card.Text>
                                     </Card.Body>
-                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor:'white', fontWeight:'bold' }} onClick={handleForumClick}>{"Click Here"}</Button>
+                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor: 'white', fontWeight: 'bold' }} onClick={handleForumClick}>{"Click Here"}</Button>
                                 </Card>
-                            </div>
+                            </Container>
+                            <hr />
                             <hr />
                             <div className="box-main">
-                                <Card bg ='primary' style={{width: '18rem'}}>
-                                    <Card.Title style={{color: 'white'}}>My Car</Card.Title>
+                                <Card bg='primary' style={{ borderRadius: '1rem', borderStyle: 'ridge', borderWidth: 'thick', borderColor: '#F6AD15' }}>
+                                    <Card.Title style={{ color: 'white' }}>My Car</Card.Title>
                                     <ListGroup variant='flush' style={{ textAlign: "left" }}>
-                                        <ListGroupItem><b>Make:</b> {make}</ListGroupItem>
-                                        <ListGroupItem><b>Model:</b> {model}</ListGroupItem>
-                                        <ListGroupItem><b>Series:</b> {year}</ListGroupItem>
+                                        <ListGroupItem key={0}><b>Make:</b> {make}</ListGroupItem>
+                                        <ListGroupItem key={1}><b>Model:</b> {model}</ListGroupItem>
+                                        <ListGroupItem key={2}><b>Year:</b> {year}</ListGroupItem>
                                     </ListGroup>
-                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor:'white', fontWeight:'bold' }} onClick={handleAcctClick}>{"My Account"}</Button>
+                                    <Button variant="primary" style={{ width: 'auto', height: 'auto', margin: '20px', borderColor: 'white', fontWeight: 'bold' }} onClick={handleAcctClick}>{"My Account"}</Button>
                                 </Card>
                             </div>
                             <hr />

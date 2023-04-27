@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { NavLink } from "react-bootstrap";
-import NavigationBar from './components/NavigationBar';
 import LoginPage from './components/LoginPage';
 import RegistrationPage from './components/RegistrationPage';
 import Diagnostics from './components/Diag';

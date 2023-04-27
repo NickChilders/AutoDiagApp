@@ -1,7 +1,7 @@
-import { Nav, Navbar, NavbarBrand, NavLink } from "react-bootstrap";
+import { Nav, Navbar, NavbarBrand, NavLink, Ratio } from "react-bootstrap";
 import { BsClipboard2Check, BsWrench } from "react-icons/bs";
 import { MdManageAccounts, MdOutlineLogin, MdOutlineLogout, MdOutlineHome, MdOutlineForum, MdMenu } from "react-icons/md";
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from "react-router-dom";
 import logo from "./../images/ADLOGO.png"
 import { UserContext } from "./userContext";
@@ -22,7 +22,7 @@ const NavigationBar = (props) => {
                             </div>
                         ) : (
                             <div style={{ color: "var(--bs-nav-link-color)", fontSize: 28 }}>
-                                <img src={logo} width="auto" height="50" alt="random logo" />
+                                <Ratio aspectRatio={'14x14'}><img src={logo} width="auto" height="50" alt="random logo" /></Ratio>
                                     &emsp; <MdMenu />
                             </div>
                         )

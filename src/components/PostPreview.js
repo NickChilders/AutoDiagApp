@@ -1,4 +1,4 @@
-import React from "react";
+import { MdMail, MdMailOutline, MdOutlineMailOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const PostPreview = ({ post }) => {
@@ -15,18 +15,54 @@ const PostPreview = ({ post }) => {
     timeAgo = hoursDiff === 1 ? "1 hour ago" : `${hoursDiff} hours ago`;
   }
 
+  const data = localStorage.getItem('userData')
+  const parsedData = JSON.parse(data);
+  const sameCheck = () => {
+    if (parsedData.username === post.author) {
+      return (
+        <tr>
+          <td className="post-title">
+            <Link to={`${process.env.PUBLIC_URL}/api/posts/${post._id}`}>{post.title}</Link>
+          </td>
+          <td style={{ textAlign: 'center' }} className="post-replies">
+            {post.comments.length > 0 ? (
+              <>
+                {post.comments.length}<br /><MdMail />
+              </>
+            ) : (
+              <>
+                {post.comments.length}<br /><MdMailOutline />
+              </>
+            )}
+          </td>
+          <td style={{ textAlign: 'left' }} className="post-authors">
+            <p><span className="author">{post.author}</span><br />
+            <span className="timeAgo">{timeAgo}</span></p>
+          </td>
+        </tr>
+      )
+    }
+    else {
+      return (
+        <tr>
+          <td className="post-title">
+            <Link to={`${process.env.PUBLIC_URL}/api/posts/${post._id}`}>{post.title}</Link>
+          </td>
+          <td style={{ textAlign: 'center' }} className="post-replies">
+            {post.comments.length}
+          </td>
+          <td style={{ textAlign: 'left' }} className="post-authors">
+            <p><span className="author">{post.author}</span><br/>
+            <span className="timeAgo">{timeAgo}</span></p>
+          </td>
+        </tr>
+      )
+    }
+  }
+
+
   return (
-    <tr>
-      <td className="post-title">
-        <Link to={`${process.env.PUBLIC_URL}/api/posts/${post._id}`}>{post.title}</Link>
-      </td>
-      <td className="post-replies">
-        {post.comments.length}
-      </td>
-      <td className="post-authors">
-        &emsp;<span className="author">{post.author}</span> <span className="timeAgo">&emsp;&emsp;{timeAgo}</span>
-      </td>
-    </tr>
+    sameCheck()
   );
 };
 

@@ -22,7 +22,7 @@ const NavigationBar = (props) => {
                             </div>
                         ) : (
                             <div style={{ color: "var(--bs-nav-link-color)", fontSize: 28 }}>
-                                <Ratio aspectRatio={'14x14'}><img src={logo} width="auto" height="50" alt="random logo" /></Ratio>
+                                <img src={logo} width="auto" height="50" alt="random logo" />
                                     &emsp; <MdMenu />
                             </div>
                         )
